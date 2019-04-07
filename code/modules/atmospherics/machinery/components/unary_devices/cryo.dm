@@ -325,11 +325,11 @@
 		return
 	return ..()
 
-/obj/machinery/atmospherics/components/unary/cryo_cell/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, \
-																	datum/tgui/master_ui = null, datum/ui_state/state = GLOB.notcontained_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/machinery/atmospherics/components/unary/cryo_cell/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = FALSE, \
+																	datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.notcontained_state)
+	ui = SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "cryo", name, 400, 550, master_ui, state)
+		ui = new(user, src, ui_key, "cryo", name, 400, 650, master_ui, state)
 		ui.open()
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/ui_data()
@@ -343,19 +343,8 @@
 	if(occupant)
 		var/mob/living/mob_occupant = occupant
 		data["occupant"]["name"] = mob_occupant.name
-		switch(mob_occupant.stat)
-			if(CONSCIOUS)
-				data["occupant"]["stat"] = "Conscious"
-				data["occupant"]["statstate"] = "good"
-			if(SOFT_CRIT)
-				data["occupant"]["stat"] = "Conscious"
-				data["occupant"]["statstate"] = "average"
-			if(UNCONSCIOUS)
-				data["occupant"]["stat"] = "Unconscious"
-				data["occupant"]["statstate"] = "average"
-			if(DEAD)
-				data["occupant"]["stat"] = "Dead"
-				data["occupant"]["statstate"] = "bad"
+		data["occupant"]["stat"] = mob_occupant.stat
+
 		data["occupant"]["health"] = round(mob_occupant.health, 1)
 		data["occupant"]["maxHealth"] = mob_occupant.maxHealth
 		data["occupant"]["minHealth"] = HEALTH_THRESHOLD_DEAD
@@ -365,14 +354,21 @@
 		data["occupant"]["fireLoss"] = round(mob_occupant.getFireLoss(), 1)
 		data["occupant"]["bodyTemperature"] = round(mob_occupant.bodytemperature, 1)
 		if(mob_occupant.bodytemperature < TCRYO)
-			data["occupant"]["temperaturestatus"] = "good"
+			data["occupant"]["temperatureStatus"] = "good"
 		else if(mob_occupant.bodytemperature < T0C)
-			data["occupant"]["temperaturestatus"] = "average"
+			data["occupant"]["temperatureStatus"] = "average"
 		else
-			data["occupant"]["temperaturestatus"] = "bad"
+			data["occupant"]["temperatureStatus"] = "bad"
 
 	var/datum/gas_mixture/air1 = airs[1]
-	data["cellTemperature"] = round(air1.temperature, 1)
+	var/temperature = round(air1.temperature, 1)
+	data["cellTemperature"] = temperature
+	if(temperature < TCRYO)
+		data["cellTemperatureStatus"] = "good"
+	else if(temperature < T0C)
+		data["cellTemperatureStatus"] = "average"
+	else
+		data["cellTemperatureStatus"] = "bad"
 
 	data["isBeakerLoaded"] = beaker ? TRUE : FALSE
 	var/beakerContents = list()
@@ -399,10 +395,10 @@
 			else
 				open_machine()
 			. = TRUE
-		if("autoeject")
+		if("autoEject")
 			autoeject = !autoeject
 			. = TRUE
-		if("ejectbeaker")
+		if("ejectBeaker")
 			if(beaker)
 				beaker.forceMove(drop_location())
 				if(Adjacent(usr) && !issilicon(usr))

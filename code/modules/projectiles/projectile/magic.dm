@@ -66,6 +66,8 @@
 	if(!isturf(target))
 		teleloc = target.loc
 	for(var/atom/movable/stuff in teleloc)
+		if(ismob(stuff) && !isliving(stuff))
+			continue
 		if(!stuff.anchored && stuff.loc)
 			if(do_teleport(stuff, stuff, 10, channel = TELEPORT_CHANNEL_MAGIC))
 				teleammount++
@@ -379,6 +381,10 @@
 	var/created = FALSE //prevents creation of more then one locker if it has multiple hits
 	var/locker_suck = TRUE
 	var/obj/structure/closet/locker_temp_instance = /obj/structure/closet/decay
+
+/obj/item/projectile/magic/locker/Initialize()
+	. = ..()
+	locker_temp_instance = new(src)
 
 /obj/item/projectile/magic/locker/prehit(atom/A)
 	if(isliving(A) && locker_suck)

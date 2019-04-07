@@ -79,9 +79,10 @@
 	var/datum/component/waddle
 	var/enabled_waddle = FALSE
 
+
 /obj/item/clothing/shoes/clown_shoes/Initialize()
 	. = ..()
-	AddComponent(/datum/component/squeak, /datum/outputs/clownstep, 50)
+	AddComponent(/datum/component/squeak/clownstep, 50)
 
 /obj/item/clothing/shoes/clown_shoes/equipped(mob/user, slot)
 	. = ..()

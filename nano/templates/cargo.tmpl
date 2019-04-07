@@ -1,0 +1,115 @@
+<div class="statusDisplay">
+<h3>Cargo</h3>
+  <div class="item">
+  <div class="itemLabel">Shuttle</div>
+	<div class="itemContent">
+    {{if data.docked && !data.requestonly}}
+		{{:~link(data.location, null, {'action': 'send'}, null)}}
+    {{else}}
+      <span>{{:data.location}}</span>
+    {{/if}}
+  </div>
+  </div><br/>
+  <div class="item">
+  <div class="itemLabel">Credits</div>
+	<div class="itemContent">
+    <span>{{:~floor(data.points)}}</span>
+  </div>
+  <div class="itemLabel">CentCom Message</div>
+      <div class = "itemContent"><span>{{:data.message}}</span></div>
+  </div><br/>
+  {{if data.loan && !data.requestonly}}
+  <div class="item">
+	<div class="itemLabel">Loan</div>
+    <div class="itemContent">
+      {{if !data.loan_dispatched}}
+		{{:~link('Loan Shuttle', null, {'action': 'send'},(data.away && data.docked) ?  null : 'disabled') }}
+      {{else}}
+        <span class='bad'>Loaned to CentCom</span>
+      {{/if}}
+    </div>
+	</div><br/>
+  {{/if}}
+</div>
+
+{{if !data.requestonly}}
+<div class="statusDisplay">
+<h3>Cart</h3>
+   <div class="statusLabel">
+		{{:~link('Clear', 'close', {'action': 'clear'}, data.cart.length ?  null : 'disabled')}}
+   </div>
+	<div class="candystripe">
+	{{for data.cart}}
+		<div class ="item">
+		<div class="itemContent">
+        #{{:id}}
+        {{:object}}
+        {{:cost}} Credits
+		By {{:orderer}}
+		{{: paid ? '<b>(Paid Directly)</b>' : ''}}
+		</div>
+		<span class ="floatRight">{{:~link('Remove', 'check', {'action': 'remove','id': id}, null)}}</span><br/>
+		</div>
+	{{else}}
+		<span>No Items in Cart</span>
+	{{/for}}
+	</div>
+</div>
+{{/if}}
+
+
+<hr>
+{{include ~ro=data.requestonly}}
+<div class="statusDisplay">
+<h3>Requests</h3>
+  <div class="item line">
+    <div class="statusLabel">
+	{{if !data.requestonly}}
+		{{:~link('Clear', 'close', {'action': 'denyall'}, data.requests.length ?  null : 'disabled')}}
+	{{/if}}
+    </div>
+	</div>
+	<div class="candystripe">
+    {{for data.requests}}
+		<div class ="item">
+		<div class="itemContent">
+        #{{:id}}
+        {{:object}}
+        {{:cost}} Credits
+		By {{:orderer}}
+		Comment: {{:reason}}
+		</div>
+		{{if !~ro}}
+			<span class ="floatRight">{^{:~link('Approve', 'check', {'action': 'approve','id': id}, null)}}</span>
+			<span class ="floatRight">{^{:~link('Deny', 'close', {'action': 'deny','id': id}, null)}}</span>
+		{{/if}}
+		</div>
+    {{else}}
+      <span>No Requests</span>
+    {{/for}}
+	</div>
+</div>
+{{/include}}
+
+{{include ~sel=data.group_selected}}
+<div class="statusDisplay">
+<h3>Ordering</h3>
+<div class ="item">
+{{props data.supplies}}
+	{{:~link(key, null, {'action': 'select_group', 'group' : key}, (~sel == key)? 'selected' : null  )}}
+{{/props}}
+</div>
+<div class="statusValue line candystripe">
+<br/>
+{{props data.supplies}}
+	{{for prop.packs}}
+		<div class ="line">
+		<div class="itemLabel"><abbr title="{{>desc}}"> {{:name}}</abbr></div> 
+		<div class="floatRight">{{:~link('Buy Directly', null, {'action': 'add','id': id, 'self_paid' : 1}, null)}}</div>
+		<div class="floatRight">{{:~link(cost + 'Credits', null, {'action': 'add','id': id, 'self_paid' : 0}, null)}}</div>
+		</div>
+	{{/for}}
+{{/props}}
+</div>
+</div>
+{{/include}}

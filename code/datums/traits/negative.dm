@@ -476,6 +476,8 @@
 /datum/quirk/junkie/on_process()
 	var/mob/living/carbon/human/H = quirk_holder
 	if (tick_counter == 60) //Halfassed optimization, increase this if there's slowdown due to this quirk
+		if(!reagent_instance)
+			reagent_instance = new reagent_type() //how did this happen?
 		var/in_list = FALSE
 		for (var/datum/reagent/entry in H.reagents.addiction_list)
 			if(istype(entry, reagent_type))

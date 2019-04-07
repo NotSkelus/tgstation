@@ -1421,11 +1421,11 @@
 	else if(istype(note, /obj/item/photo))
 		return "photo"
 
-/obj/machinery/door/airlock/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, \
-													datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
-	SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/machinery/door/airlock/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = FALSE, \
+													datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.default_state)
+	SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "ai_airlock", name, 550, 456, master_ui, state)
+		ui = new(user, src, ui_key, "ai_airlock", name, 550, 456, master_ui, state, ticks_for_autoupdate = 5)
 		ui.open()
 	return TRUE
 
@@ -1435,12 +1435,24 @@
 	var/list/power = list()
 	power["main"] = secondsMainPowerLost ? 0 : 2 // boolean
 	power["main_timeleft"] = secondsMainPowerLost
+	power["main_state"] = "good"
+	if(secondsMainPowerLost)
+		power["main_state"] = "bad"
 	power["backup"] = secondsBackupPowerLost ? 0 : 2 // boolean
 	power["backup_timeleft"] = secondsBackupPowerLost
+	power["backup_state"] = "good"
+	if(secondsBackupPowerLost)
+		power["backup_state"] = "bad"
+
 	data["power"] = power
+
+
 
 	data["shock"] = secondsElectrified == MACHINE_NOT_ELECTRIFIED ? 2 : 0
 	data["shock_timeleft"] = secondsElectrified
+	data["shock_state"] = "good"
+	if(secondsElectrified)
+		data["shock_state"] = "bad"
 	data["id_scanner"] = !aiDisabledIdScanner
 	data["emergency"] = emergency // access
 	data["locked"] = locked // bolted

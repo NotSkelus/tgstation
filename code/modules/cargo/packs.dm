@@ -881,7 +881,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 /datum/supply_pack/materials
-	group = "Canisters & Materials"
+	group = "Canisters and Materials"
 
 /datum/supply_pack/materials/cardboard50
 	name = "50 Cardboard Sheets"
@@ -1447,7 +1447,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 /datum/supply_pack/organic
-	group = "Food & Hydroponics"
+	group = "Food and Hydroponics"
 	crate_type = /obj/structure/closet/crate/freezer
 
 /datum/supply_pack/organic/hydroponics/beekeeping_suits
@@ -1750,7 +1750,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 /datum/supply_pack/costumes_toys
-	group = "Costumes & Toys"
+	group = "Costumes and Toys"
 
 /datum/supply_pack/costumes_toys/randomised
 	name = "Collectable Hats Crate"

@@ -19,6 +19,8 @@
 	. = UI_CLOSE
 	if(!state)
 		return
+	if(!user.client)
+		return
 
 	if(isobserver(user))
 		// If they turn on ghost AI control, admins can always interact.

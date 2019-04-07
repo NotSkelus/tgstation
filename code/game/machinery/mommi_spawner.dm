@@ -70,48 +70,7 @@
 	if(spawner)
 		spawner.attack_ghost(user)
 
-/*
-/obj/machinery/mommi_spawner/proc/makeMoMMI(var/mob/user)
-	if(!user || !user.key)
-		building=0
-		update_icon()
-		return
-	var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(get_turf(loc))
-	if(!M)
-		building=0
-		update_icon()
-		return
 
-	//M.custom_name = created_name
-
-	if(M.key)
-		M.ghostize(1)
-	M.key = user.key
-
-
-	M.job = "MoMMI"
-	M.generated = 1
-	M.invisibility = 0
-
-	M.initialize_killswitch()
-
-	//M.cell = locate(/obj/item/weapon/cell) in contents
-	//M.cell.loc = M
-	user.loc = M//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
-
-	M.mmi = new /obj/item/device/mmi(M)
-	M.mmi.transfer_identity(user)//Does not transfer key/client.
-
-	spawn(50) //delay to hopefully prevent mind getting deleted while it still hasn't transfered
-		qdel(user)
-
-	metal=0
-	building=0
-	update_icon()
-	M.updateicon()
-	M.cell.maxcharge = 15000
-	M.cell.charge = 15000
-*/
 /obj/machinery/mommi_spawner/update_icon()
 	if(stat & NOPOWER)
 		icon_state="mommispawner-nopower"

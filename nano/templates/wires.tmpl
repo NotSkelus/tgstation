@@ -1,0 +1,31 @@
+{{if data.wires}}
+<div class="statusDisplay">
+  {{props data.wires}}
+  {{if prop.color}}
+	<div class="statusItem">
+		<div class="line">
+		<div class="statusLabel"><span style="color:{{:prop.color}};"> {{:prop.color}}{{if prop.wire}} ({{:prop.wire}}){{/if}}</span></div>
+		<span class="floatleft">
+		{{:~link((prop.cut ? 'Mend' : 'Cut'), null, {'action':'cut', 'wire':prop.color}, null)}}
+		{{:~link('Pulse', null, {'action':'pulse', 'wire':prop.color}, null)}}
+		{{:~link((prop.attached ? 'Detach' : 'Attach'), null, {'action':'attach', 'wire':prop.color}, null)}}
+		</span>
+		</div></div>
+  {{/if}}
+
+  {{/props}}
+</div>
+{{if data.wire_status}}
+<hr>
+	
+	<div class="statusDisplay">
+	{{props data.wire_status}}
+		{{if key != "indexOf"}}
+		<div class="statusItem">
+			{{:prop}}
+		</div>
+		{{/if}}
+	{{/props}}
+	</div>
+	{{/if}}
+{{/if}}

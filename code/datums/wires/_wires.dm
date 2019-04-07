@@ -218,12 +218,17 @@
 		return ..()
 	return UI_CLOSE
 
-/datum/wires/ui_interact(mob/user, ui_key = "wires", datum/tgui/ui = null, force_open = FALSE, \
-							datum/tgui/master_ui = null, datum/ui_state/state = GLOB.physical_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/datum/wires/ui_interact(mob/user, ui_key = "wires", datum/nanoui/ui = null, force_open = FALSE, \
+							datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.physical_state)
+	ui = SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "wires", "[holder.name] wires", 350, 150 + wires.len * 30, master_ui, state)
+		ui = new(user, src, ui_key, "wires", "[holder.name] wires", 400, 150 + wires.len * 40, master_ui, state, ticks_for_autoupdate = 10)
 		ui.open()
+		/*
+		spawn(2)
+			SSnanoui.try_update_ui(user, src, ui_key, ui, force_open) //HACK
+
+*/
 
 /datum/wires/ui_data(mob/user)
 	var/list/data = list()
@@ -242,6 +247,7 @@
 	else if(user.is_holding_item_of_type(/obj/item/areaeditor/blueprints) && !randomize)
 		reveal_wires = TRUE
 
+	data["wire_status"] = get_status()
 	for(var/color in colors)
 		payload.Add(list(list(
 			"color" = color,
@@ -250,7 +256,6 @@
 			"attached" = is_attached(color)
 		)))
 	data["wires"] = payload
-	data["status"] = get_status()
 	return data
 
 /datum/wires/ui_act(action, params)

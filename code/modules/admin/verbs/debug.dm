@@ -1081,6 +1081,25 @@ GLOBAL_PROTECT(AdminProcCallSpamPrevention)
 	sort = sortlist[sort]
 	profile_show(src, sort)
 
+/client/proc/reload_nanoui()
+	set category = "Debug"
+	set name = "Reload nanoUI files"
+	set desc = "Force nanoUI to reload templates"
+	if(!check_rights(R_DEBUG))
+		return
+	SSnanoui.loadfiles()
+	SSnanoui.send_resources(src)
+
+/client/proc/nanodebug()
+	set category = "Debug"
+	set name = "Debug nanoUI interfaces"
+	set desc = "Print out the json sent out"
+	if(!check_rights(R_DEBUG))
+		return
+	nanodebug = !nanodebug
+	to_chat(usr, "Nanodebug is now [nanodebug]")
+
+
 /client/proc/reload_configuration()
 	set category = "Debug"
 	set name = "Reload Configuration"

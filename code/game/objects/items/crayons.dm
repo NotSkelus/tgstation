@@ -35,7 +35,7 @@
 	var/drawtype
 	var/text_buffer = ""
 
-	var/static/list/graffiti = list("amyjon","face","matt","revolution","engie","guy","end","dwarf","uboa","body","cyka","star","poseur tag","prolizard","antilizard")
+	var/static/list/graffiti = list("amyjon","face","matt","revolution","engie","guy","end","dwarf","uboa","body","cyka","star","prolizard","antilizard") //poseur tag doesn't work due to no gang
 	var/static/list/letters = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
 	var/static/list/punctuation = list("!","?",".",",","/","+","-","=","%","#","&")
 	var/static/list/numerals = list("0","1","2","3","4","5","6","7","8","9")
@@ -140,13 +140,13 @@
 		to_chat(user, "<span class='warning'>There is not enough of [src] left!</span>")
 		. = TRUE
 
-/obj/item/toy/crayon/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.hands_state)
+/obj/item/toy/crayon/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = FALSE, datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.hands_state)
 	// tgui is a plague upon this codebase
 
-	SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+	SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "crayon", name, 600, 600,
-			master_ui, state)
+		ui = new(user, src, ui_key, "crayon", name, 600, 700,
+			master_ui, state, ticks_for_autoupdate = 0) //no autorefresh on this thing
 		ui.open()
 
 /obj/item/toy/crayon/spraycan/AltClick(mob/user)
@@ -218,15 +218,16 @@
 	if (!crayon_drawables)
 		crayon_drawables = staticDrawables()
 
-	. = list()
-	.["drawables"] = crayon_drawables
-	.["selected_stencil"] = drawtype
-	.["text_buffer"] = text_buffer
+	var/data = list()
+	data["drawables"] = crayon_drawables
+	data["selected_stencil"] = drawtype
+	data["text_buffer"] = text_buffer
 
-	.["has_cap"] = has_cap
-	.["is_capped"] = is_capped
-	.["can_change_colour"] = can_change_colour
-	.["current_colour"] = paint_color
+	data["has_cap"] = has_cap
+	data["is_capped"] = is_capped
+	data["can_change_colour"] = can_change_colour
+	data["current_colour"] = paint_color
+	return data
 
 /obj/item/toy/crayon/ui_act(action, list/params)
 	if(..())
@@ -272,6 +273,7 @@
 	if(!proximity || !check_allowed_items(target))
 		return
 
+
 	var/cost = 1
 	if(paint_mode == PAINT_LARGE_HORIZONTAL)
 		cost = 5
@@ -285,6 +287,7 @@
 	if(!charges_used)
 		return
 	. = charges_used
+	SSnanoui.update_user_uis(user, src)
 
 	if(istype(target, /obj/effect/decal/cleanable))
 		target = target.loc

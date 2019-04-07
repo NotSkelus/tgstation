@@ -1,0 +1,35 @@
+{{if data.maskConnected}}
+	<div class="noticePlaceholder">This tank is connected to a mask.</div>
+{{else}}
+	<div class="notice">This tank is NOT connected to a mask.</div>
+{{/if}}	
+
+<div class="item">
+	<div class="itemLabel">
+		Tank Pressure:
+	</div>
+	<div class="itemContent">
+		{{:~displayBar(data.tankPressure, 0, 1013, (data.tankPressure > 200) ? 'good' : ((data.tankPressure > 100) ? 'average' : 'bad'))}}
+		<div class="statusValue">
+			{{:data.tankPressure}} kPa
+		</div>
+	</div>
+</div>
+
+<div class="item">&nbsp;</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Mask Release Pressure:
+	</div>
+	<div class="itemContent">
+		{{:~displayBar(data.releasePressure, 0, data.maxReleasePressure, (data.releasePressure >= 23) ? null : ((data.releasePressure >= 16) ? 'average' : 'bad'))}}
+		<div style="clear: both; padding-top: 4px;">
+			{{:~link('Min', 'minus', {'action': 'pressure', 'pressure' : 'min'}, (data.releasePressure > 0) ? null : 'disabled')}}
+			{{:~link(data.releasePressure + ' kPa', 'pencil', {'action': 'pressure', 'pressure' : 'input'}, null )}} 
+			{{:~link('Max', 'plus', {'action': 'pressure', 'pressure' : 'max'}, (data.releasePressure < data.maxReleasePressure) ? null : 'disabled')}}
+			{{:~link('Reset', 'refresh', {'action': 'pressure', 'pressure' : 'reset'}, (data.releasePressure != data.defaultReleasePressure) ? null : 'disabled')}}
+		</div>
+	</div>
+</div>
+

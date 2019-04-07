@@ -391,6 +391,16 @@ GLOBAL_LIST_EMPTY(asset_datums)
 		"fontawesome-webfont.svg" = 'tgui/assets/fonts/fontawesome-webfont.svg'
 	)
 
+/datum/asset/simple/nanoui
+	assets = list(
+		"libraries.min.js"	= 'nano/js/libraries.min.js',
+		"nano_config.js"	= 'nano/js/nano_config.js',
+		"nano_update.js" = 'nano/js/nano_update.js',
+		"nano_base_helpers.js" = 'nano/js/nano_base_helpers.js',
+		"shared.css" = 'nano/css/shared.css',
+		"icons.css" = 'nano/css/icons.css'
+	)
+
 /datum/asset/simple/headers
 	assets = list(
 		"alarm_green.gif" 			= 'icons/program_icons/alarm_green.gif',

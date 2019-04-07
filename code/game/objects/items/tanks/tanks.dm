@@ -151,15 +151,16 @@
 	else
 		. = ..()
 
-/obj/item/tank/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, \
+/obj/item/tank/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = FALSE, \
 									datum/tgui/master_ui = null, datum/ui_state/state = GLOB.hands_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+	ui = SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "tanks", name, 420, 200, master_ui, state)
+		ui = new(user, src, ui_key, "tanks", name, 550, 200, master_ui, state)
 		ui.open()
 
 /obj/item/tank/ui_data(mob/user)
 	var/list/data = list()
+	data["maskConnected"] = FALSE
 	data["tankPressure"] = round(air_contents.return_pressure() ? air_contents.return_pressure() : 0)
 	data["releasePressure"] = round(distribute_pressure ? distribute_pressure : 0)
 	data["defaultReleasePressure"] = round(TANK_DEFAULT_RELEASE_PRESSURE)
@@ -173,7 +174,7 @@
 		return data
 
 	if(C.internal == src)
-		data["connected"] = TRUE
+		data["maskConnected"] = TRUE
 
 	return data
 

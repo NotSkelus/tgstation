@@ -1,0 +1,168 @@
+<h3>Power Status</h3>
+<div class="statusDisplay">
+<div class="item">
+	<div class="statusLabelSmall">
+		Main:
+	</div>
+	<div class="statusValue">
+		<span class={{:data.power.main_state}}>{{:data.power.main ? 'Online' : 'Offline'}}</span>
+		{{if !data.wires.main_1 || !data.wires.main_2}}
+			<span class="bad">Wires have been cut</span>
+		{{else}}
+			{{if data.power.main_timeleft > 0}}
+			 {{:data.power.main_timeleft}} seconds left
+			{{/if}}
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Disrupt', 'power', {'action':'disrupt-main'}, data.power.main ? null : "disabled")}}
+	</span>
+</div>
+<div class="item">
+	<div class="statusLabelSmall">
+		Backup:
+	</div>
+	<div class="statusValue">
+		<span class={{:data.power.backup_state}}>{{:data.power.backup ? 'Online' : 'Offline'}}</span>
+		{{if !data.wires.backup_1 || !data.wires.backup_2}}
+			<span class="bad">Wires have been cut</span>
+		{{else}}
+			{{if data.power.backup_timeleft > 0}}
+			 {{:data.power.backup_timeleft}} seconds left
+			{{/if}}
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Disrupt', 'power', {'action':'disrupt-backup'}, data.power.backup ? null : "disabled")}}
+	</span>
+</div>
+
+<div class="item">
+	<div class="statusLabelSmall">
+		Electrify:
+	</div>
+	<div class="statusValue">
+		<span class={{:data.shock_state}}>{{:data.shock == 2 ? 'Safe' : 'Electrified'}}</span>
+		{{if !data.wires.shock}}
+			<span class="bad">Wires have been cut</span>
+		{{else}}
+			{{if data.shock_timeleft > 0}}
+				<span class="bad">{{:data.shock_timeleft}} seconds left</span>
+			{{/if}}
+			{{if data.shock_timeleft == -1}}
+				<span class="bad">Permanent</span>
+			{{/if}}
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Restore', 'wrench', {'action':'shock-restore'}, (data.wires.shock && data.shock==0) ? null : "disabled")}}
+		{^{:~link('Set (Temporary)', 'alert', {'action':'shock-temp'}, (data.wires.shock) ? null : "disabled")}}
+		{^{:~link('Set (Permanent)', 'alert', {'action':'shock-perm'}, (data.wires.shock) ? null : "disabled")}}
+	</span>
+	
+</div>
+</div>
+<hr>
+<h3>Access and Door Control</h3>
+<div class="statusDisplay">
+<div class="item">
+	<div class="statusLabel">
+		ID Scan:
+	</div>
+	<div class="statusValue">
+		{{if !data.wires.id_scanner}}
+			<span class="bad">Wires have been cut</span>
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Enabled', 'power', {'action':'idscan-on'}, data.id_scanner ? "selected" : (data.wires.id_scanner ? null : "disabled"))}}
+		{^{:~link('Disabled', 'close', {'action':'idscan-off'}, data.id_scanner ? null : (data.wires.id_scanner ?  "selected" : "disabled"))}}
+	</span>
+</div>
+
+<div class="item">
+	<div class="statusLabel">
+		Emergency Access:
+	</div>
+	<span class="floatRight">
+		{^{:~link('Enabled', 'power', {'action':'emergency-on'}, data.emergency ? "selected" : null)}}
+		{^{:~link('Disabled', 'close', {'action':'emergency-off'}, data.emergency  ? null :  "selected"))}}
+	</span>
+</div>
+
+<div class="item">
+	<div class="statusLabel">
+		Door Bolts:
+	</div>
+	<div class="statusValue">
+		{{if !data.wires.bolts}}
+			<span class="bad">Wires have been cut</span>
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Dropped', 'locked', {'action':'bolt-drop'}, data.locked ? "selected" : (data.wires.bolts ? null : "disabled"))}}
+		{^{:~link('Raised', 'unlocked', {'action':'bolt-raise'}, data.locked ? null : (data.wires.bolts ?  "selected" : "disabled"))}}
+	</span>
+</div>
+
+<div class="item">
+	<div class="statusLabel">
+		Door Bolt Lights:
+	</div>
+	<div class="statusValue">
+		{{if !data.wires.lights}}
+			<span class="bad">Wires have been cut</span>
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Enabled', 'power', {'action':'light-on'}, data.lights ? "selected" : (data.wires.lights ? null : "disabled"))}}
+		{^{:~link('Disabled', 'close', {'action':'light-off'}, data.lights ? null : (data.wires.lights ?  "selected" : "disabled"))}}
+	</span>
+</div>
+
+<div class="item">
+	<div class="statusLabel">
+		Door force sensors:
+	</div>
+	<div class="statusValue">
+		{{if !data.wires.safe}}
+			<span class="bad">Wires have been cut</span>
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Enabled', 'power', {'action':'safe-on'}, data.safe ? "selected" : (data.wires.safe ? null : "disabled"))}}
+		{^{:~link('Disabled', 'close', {'action':'safe-off'}, data.safe ? null : (data.wires.safe ?  "selected" : "disabled"))}}
+	</span>
+</div>
+
+<div class="item">
+	<div class="statusLabel">
+		Door timing safety:
+	</div>
+	<div class="statusValue">
+		{{if !data.wires.id_scanner}}
+			<span class="bad">Wires have been cut</span>
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Enabled', 'power', {'action':'speed-on'}, data.speed ? "selected" : (data.wires.timing ? null : "disabled"))}}
+		{^{:~link('Disabled', 'close', {'action':'speed-off'}, data.speed ? null : (data.wires.timing ?  "selected" : "disabled"))}}
+	</span>
+</div>
+
+<div class="item">
+	<div class="statusLabel">
+		Door control:
+	</div>
+	<div class="statusValue">
+		{{if data.locked || data.welded}}
+			<span class="bad">Door is {{:"" + (data.locked ? "bolted" : "") + ((data.locked && data.welded) ? " and " : "") + (data.welded ? "welded" : "")}}</span>
+		{{/if}}
+	</div>
+	<span class="floatRight">
+		{^{:~link('Open', 'check', {'action':'open-close'}, (data.locked || data.welded) ? "disabled" : (!data.opened ? null : "disabled"))}}
+		{^{:~link('Close', 'close', {'action':'open-close'}, (data.locked || data.welded) ? "disabled" : (data.opened ? null : "disabled"))}}
+	</span>
+</div>
+
+</div>

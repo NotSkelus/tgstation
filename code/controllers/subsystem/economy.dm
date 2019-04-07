@@ -133,3 +133,5 @@ SUBSYSTEM_DEF(economy)
 	var/datum/bank_account/D = get_dep_account(ACCOUNT_CIV)
 	if(D)
 		D.adjust_money((rand(1,5) * 500))
+
+

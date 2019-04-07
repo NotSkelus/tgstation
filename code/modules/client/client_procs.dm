@@ -787,6 +787,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		)
 	spawn (10) //removing this spawn causes all clients to not get verbs.
 		//Precache the client with all other assets slowly, so as to not block other browse() calls
+		SSnanoui.send_resources(src)
 		getFilesSlow(src, SSassets.preload, register_asset = FALSE)
 		#if (PRELOAD_RSC == 0)
 		for (var/name in GLOB.vox_sounds)

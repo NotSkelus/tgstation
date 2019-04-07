@@ -1,0 +1,37 @@
+{{if data.has_cap}}
+<div class="item">
+	<div class="statusLabelSmall">Cap: {^{:~link(!data.is_capped ? 'Off' : 'On',!data.is_capped ? 'power': 'close', {'action':'toggle_cap'}, null)}}
+	</div>
+</div>
+{{/if}}
+<div class="item">
+	<div class="itemLabel">
+	Current color: {{:data.current_colour}}
+	</div>
+
+{{if data.can_change_colour}}
+<div class="itemContent">
+		{^{:~link('Select New Colour', null, {'action':'select_colour'}, null)}}
+</div>
+</div>
+{{/if}}
+{{include ~stencil=data.selected_stencil}}
+<h3>Stencil</h3>
+<div class="item">
+  {{for data.drawables}}
+	<div class="item">
+	<div class="itemLabel">{{:name}}</div>
+	<div class="itemContent">
+		{{for items}}
+			{^{:~link(item, null, {'action':'select_stencil', 'item':item}, (~stencil === item) ? 'selected' : null )}}
+		{{/for}}
+		</div>
+	</div>
+	{{/for}}
+</div>
+{{/include}}
+<div class="item">
+<h3>Text Mode</h3>
+	<div class="itemLabel">Text Buffer:</div>{{:data.text_buffer}}
+	{^{:~link('New Text', null, {'action':'enter_text', 'item':item}, null )}}
+</div>

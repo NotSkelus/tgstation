@@ -74,6 +74,8 @@
 	if(master_ui)
 		master_ui.children += src
 	src.state = state
+	if(!initial_data) //want this done a bit before the actual open
+		set_initial_data(src_object.ui_data(user)) // Get the UI data.
 
 	var/datum/asset/assets = get_asset_datum(/datum/asset/simple/tgui)
 	assets.send(user)
@@ -91,8 +93,7 @@
 	if(status < UI_UPDATE)
 		return // Bail if we're not supposed to open.
 
-	if(!initial_data)
-		set_initial_data(src_object.ui_data(user)) // Get the UI data.
+
 
 	var/window_size = ""
 	if(width && height) // If we have a width and height, use them.

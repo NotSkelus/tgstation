@@ -39,6 +39,8 @@ SUBSYSTEM_DEF(shuttle)
 	var/list/discoveredPlants = list()	//Typepaths for unusual plants we've already sent CentCom, associated with their potencies
 
 	var/list/supply_packs = list()
+	var/list/supply_packs_groups()
+	var/list/supply_packs_cache = list()
 	var/list/shoppinglist = list()
 	var/list/requestlist = list()
 	var/list/orderhistory = list()
@@ -61,6 +63,7 @@ SUBSYSTEM_DEF(shuttle)
 		if(!P.contains)
 			continue
 		supply_packs[P.type] = P
+	build_packs_cache()
 
 	initial_load()
 
@@ -619,3 +622,16 @@ SUBSYSTEM_DEF(shuttle)
 		C.update_hidden_docking_ports(remove_images, add_images)
 
 	QDEL_LIST(remove_images)
+
+
+/datum/controller/subsystem/shuttle/proc/build_packs_cache() //for the cargo console //trades memory and init speed for UI speed
+	supply_packs_groups = list()
+	supply_packs_cache = list()
+	for(var/pack in SSshuttle.supply_packs)
+		var/datum/supply_pack/P = SSshuttle.supply_packs[pack]
+		if(!supply_packs_groups[P.group])
+			supply_packs_groups[P.group] = P.group
+		if(!supply_packs_cache[P.group])
+			supply_packs_cache[P.group] = list()
+		supply_packs_cache[P.group] += pack
+

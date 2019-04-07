@@ -9,6 +9,15 @@
 		cannot transport live organisms, human remains, classified nuclear weaponry \
 		or homing beacons."
 	var/blockade_warning = "Bluespace instability detected. Shuttle movement impossible."
+	var/group_selected //Occlusion for packs
+	/* Pack occlusion system: What it is and how does it work?
+	The cargo console used to send out ALL the packs you could order every time it updated,
+	this makes it so only the packs in the category selected in the console (if they are applicable)
+	are sent to the client on, making it lag less and work better, althrough it does add a bit of a
+	delay when switching tabs.
+	The group selection is set when you click on the group in the interface, and the packs are selected
+	for inclusion in the data sent by the group active.
+	*/
 
 	light_color = "#E2853D"//orange
 
@@ -49,9 +58,9 @@
 	board.contraband = TRUE
 	board.obj_flags |= EMAGGED
 
-/obj/machinery/computer/cargo/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, \
-											datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/machinery/computer/cargo/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = FALSE, \
+											datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.default_state)
+	ui = SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "cargo", name, 1000, 800, master_ui, state)
 		ui.open()
@@ -74,21 +83,26 @@
 		message = blockade_warning
 	data["message"] = message
 	data["supplies"] = list()
-	for(var/pack in SSshuttle.supply_packs)
-		var/datum/supply_pack/P = SSshuttle.supply_packs[pack]
-		if(!data["supplies"][P.group])
-			data["supplies"][P.group] = list(
-				"name" = P.group,
+	data["group_selected"] = group_selected
+	for(var/group in SSshuttle.supply_packs_groups) //this looks through the packs for categories
+		if(!data["supplies"][group])
+			data["supplies"][group] = list(
+				"name" = group,
 				"packs" = list()
 			)
-		if((P.hidden && !(obj_flags & EMAGGED)) || (P.contraband && !contraband) || (P.special && !P.special_enabled) || P.DropPodOnly)
+
+		if(group != group_selected) //occlude all unneeded packs
 			continue
-		data["supplies"][P.group]["packs"] += list(list(
-			"name" = P.name,
-			"cost" = P.cost,
-			"id" = pack,
-			"desc" = P.desc || P.name // If there is a description, use it. Otherwise use the pack's name.
-		))
+		for(var/pack in SSshuttle.supply_packs_cache[group] )
+			var/datum/supply_pack/P = SSshuttle.supply_packs[pack]
+			if((P.hidden && !(obj_flags & EMAGGED)) || (P.contraband && !contraband) || (P.special && !P.special_enabled) || P.DropPodOnly)
+				continue
+			data["supplies"][group]["packs"] += list(list(
+				"name" = P.name,
+				"cost" = P.cost,
+				"id" = pack,
+				"desc" = P.desc || P.name // If there is a description, use it. Otherwise use the pack's name.
+			))
 
 	data["cart"] = list()
 	for(var/datum/supply_order/SO in SSshuttle.shoppinglist)
@@ -112,10 +126,50 @@
 
 	return data
 
-/obj/machinery/computer/cargo/ui_act(action, params, datum/tgui/ui)
+/obj/machinery/computer/cargo/ui_data_empty() //stops it being loaded with 3 million things
+	var/list/data = list()
+	data["requestonly"] = requestonly
+	data["location"] = SSshuttle.supply.getStatusText()
+	var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_CAR)
+	if(D)
+		data["points"] = D.account_balance
+	data["away"] = SSshuttle.supply.getDockedId() == "supply_away"
+	data["docked"] = SSshuttle.supply.mode == SHUTTLE_IDLE
+	data["loan"] = !!SSshuttle.shuttle_loan
+	data["loan_dispatched"] = SSshuttle.shuttle_loan && SSshuttle.shuttle_loan.dispatched
+	var/message = "Remember to stamp and send back the supply manifests."
+	if(SSshuttle.centcom_message)
+		message = SSshuttle.centcom_message
+	if(SSshuttle.supplyBlocked)
+		message = blockade_warning
+	data["message"] = message
+	data["supplies"] = list()
+	data["group_selected"] = group_selected
+	for(var/group in SSshuttle.supply_packs_groups) //this looks through the packs for categories
+		if(!data["supplies"][group])
+			data["supplies"][group] = list(
+				"name" = group,
+				"packs" = list()
+			)
+			data["supplies"][group]["packs"] += list(list(
+			))
+
+	data["cart"] = list()
+	for(var/datum/supply_order/SO in SSshuttle.shoppinglist)
+		data["cart"] += list(list(
+		))
+
+	data["requests"] = list()
+	for(var/datum/supply_order/SO in SSshuttle.requestlist)
+		data["requests"] += list(list(
+		))
+
+	return data
+
+/obj/machinery/computer/cargo/ui_act(action, params, datum/nanoui/ui)
 	if(..())
 		return
-	if(action != "add" && requestonly)
+	if((action != "add" && requestonly) && (action != "select_group" && requestonly))
 		return
 	switch(action)
 		if("send")
@@ -135,6 +189,10 @@
 				say("The supply shuttle has been called and will arrive in [SSshuttle.supply.timeLeft(600)] minutes.")
 				SSshuttle.moveShuttle("supply", "supply_home", TRUE)
 			. = TRUE
+		if("select_group")
+			group_selected = params["group"]
+			. = TRUE
+
 		if("loan")
 			if(!SSshuttle.shuttle_loan)
 				return
