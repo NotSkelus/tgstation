@@ -341,6 +341,8 @@
 /obj/item/organ/eyes/moth
 	name = "moth eyes"
 	desc = "These eyes seem to have increased sensitivity to bright light, with no improvement to low light vision."
+	eye_icon_state = "moth_eyes"
+	icon_state = "moth_eyeballs"
 	flash_protect = -1
 
 /obj/item/organ/eyes/snail
@@ -348,4 +350,4 @@
 	desc = "These eyes seem to have a large range, but might be cumbersome with glasses."
 	eye_icon_state = "snail_eyes"
 	icon_state = "snail_eyeballs"
-	
+

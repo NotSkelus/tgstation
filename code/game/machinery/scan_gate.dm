@@ -1,5 +1,5 @@
 #define SCANGATE_NONE 			"Off"
-#define SCANGATE_MINDSHIELD 	"Mindshield"
+#define SCANGATE_MINDSHIELD 	"Loyalty"
 #define SCANGATE_NANITES 		"Nanites"
 #define SCANGATE_DISEASE 		"Disease"
 #define SCANGATE_GUNS 			"Guns"

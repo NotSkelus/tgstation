@@ -20,15 +20,16 @@ Self-sustaining extracts:
 	for(var/i = 0, i < 4, i++)
 		var/obj/item/autoslime/A = new /obj/item/autoslime(src.loc)
 		var/obj/item/slime_extract/X = new extract_type(A)
-		A.extract = X
+		A.set_extract(X)
 		A.icon = icon
 		A.icon_state = icon_state
 		A.color = color
 	return INITIALIZE_HINT_QDEL
 
-/obj/item/autoslime/Initialize()
+/obj/item/autoslime/proc/set_extract(obj/item/slime_extract/X)
+	extract = X
 	name = "self-sustaining " + extract.name
-	return ..()
+	return
 
 /obj/item/autoslime/attack_self(mob/user)
 	var/reagentselect = input(user, "Choose the reagent the extract will produce.", "Self-sustaining Reaction") as null|anything in extract.activate_reagents

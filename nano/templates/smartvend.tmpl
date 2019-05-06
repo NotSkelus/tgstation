@@ -1,0 +1,42 @@
+<h3>Storage</h3>
+{{if data.isdryer}}
+<div class="item">
+	{{:~link(data.drying ? 'Stop Drying' : 'Dry' , 'power', {'action' : 'Dry'}, null ) }}
+</div>
+{{/if}}
+
+{{if !data.contents || data.contents.length == 0}}
+  <div class="notice">
+    Unfortunately, this {{:data.name}} is empty.
+  </div>
+{{else}}
+<div class="item line tabular">
+	<section class="candystripe">
+			<div class="itemLabel">
+				Item
+
+				Quantity
+			</div>
+			<div class="itemContent">
+				{{if data.verb}}{{:data.verb}}{{else}}Dispense{{/if}}
+			</div>
+		</section>
+	{{props data.contents}}
+		<div class="item line">
+			<div class="itemLabel">
+				{{:prop.name}}
+				
+				{{:prop.amount}}
+			</div>
+			<div class="itemContent">
+				<section class="cell">
+					{{:~link('One', null, {'action' : 'Release', 'name' : prop.name, 'amount' : 1}, prop.amount >= 1 ? null : 'disabled'  ) }}
+				</section>
+				<section class="cell">
+					{{:~link('Many', null, {'action' : 'Release', 'name' : prop.name}, prop.amount > 1 ? null : 'disabled' ) }}
+				</section>
+			</div>
+		</section>
+	{{/props}}
+</div>
+{{/if}}

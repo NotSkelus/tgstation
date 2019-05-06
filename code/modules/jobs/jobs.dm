@@ -57,6 +57,7 @@ GLOBAL_LIST_INIT(security_positions, list(
 GLOBAL_LIST_INIT(nonhuman_positions, list(
 	"AI",
 	"Cyborg",
+	"MoMMI",
 	ROLE_PAI))
 
 GLOBAL_LIST_INIT(exp_jobsmap, list(

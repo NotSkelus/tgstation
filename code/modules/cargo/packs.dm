@@ -443,11 +443,11 @@
 	crate_name = "exile implant crate"
 
 /datum/supply_pack/security/armory/mindshield
-	name = "Mindshield Implants Crate"
-	desc = "Prevent against radical thoughts with three Mindshield implants. Requires Armory access to open."
+	name = "Loyalty Implants Crate"
+	desc = "Prevent against radical thoughts with three Loyalty implants. Requires Armory access to open."
 	cost = 4000
 	contains = list(/obj/item/storage/lockbox/loyalty)
-	crate_name = "mindshield implant crate"
+	crate_name = "loyalty implant crate"
 
 /datum/supply_pack/security/armory/trackingimp
 	name = "Tracking Implants Crate"

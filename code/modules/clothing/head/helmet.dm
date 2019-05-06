@@ -216,7 +216,24 @@
 
 /obj/item/clothing/head/helmet/gladiator
 	name = "gladiator helmet"
-	desc = "Ave, Imperator, morituri te salutant."
+	desc = "Ave, Imperator, morituri te salutant. A bit old and ashy."
+	icon_state = "gladiator"
+	item_state = "gladiator"
+	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEHAIR
+	flags_cover = HEADCOVERSEYES
+	dog_fashion = null
+
+
+/obj/item/clothing/head/helmet/gladiator/ash
+	allowed = null
+	body_parts_covered = HEAD
+	strip_delay = 60
+	equip_delay_other = 40
+	max_integrity = 250
+	resistance_flags = NONE
+	armor = list("melee" = 10, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 15, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
+	name = "Ash gladiator helmet"
+	desc = "Ave, Imperator, morituri te salutant. A bit old and ashy."
 	icon_state = "gladiator"
 	item_state = "gladiator"
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEHAIR

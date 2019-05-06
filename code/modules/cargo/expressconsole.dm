@@ -1,5 +1,5 @@
 #define MAX_EMAG_ROCKETS 8
-#define BEACON_COST 5000
+#define BEACON_COST 500
 #define SP_LINKED 1
 #define SP_READY 2
 #define SP_LAUNCH 3
@@ -84,8 +84,8 @@
 			"desc" = P.desc || P.name // If there is a description, use it. Otherwise use the pack's name.
 		))
 
-/obj/machinery/computer/cargo/express/ui_interact(mob/living/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state) // Remember to use the appropriate state.
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/machinery/computer/cargo/express/ui_interact(mob/living/user, ui_key = "main", datum/nanoui/ui = null, force_open = 0, datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.default_state) // Remember to use the appropriate state.
+	ui = SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "cargo_express", name, 1000, 800, master_ui, state)
 		ui.open()
@@ -120,10 +120,52 @@
 	if(!meme_pack_data)
 		packin_up()
 		stack_trace("You didn't give the cargo tech good advice, and he ripped the manifest. As a result, there was no pack data for [src]")
+	data["group_selected"] = group_selected
 	data["supplies"] = meme_pack_data
 	if (cooldown > 0)//cooldown used for printing beacons
 		cooldown--
 	return data
+
+/obj/machinery/computer/cargo/express/ui_data_empty() //stops it being loaded with 3 million things
+	var/canBeacon = beacon && (isturf(beacon.loc) || ismob(beacon.loc))//is the beacon in a valid location?
+	var/list/data = list()
+	var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_CAR)
+	if(D)
+		data["points"] = D.account_balance
+	data["locked"] = locked//swipe an ID to unlock
+	data["siliconUser"] = FALSE
+	data["beaconzone"] = beacon ? get_area(beacon) : ""//where is the beacon located? outputs in the tgui
+	data["usingBeacon"] = usingBeacon //is the mode set to deliver to the beacon or the cargobay?
+	data["canBeacon"] = !usingBeacon || canBeacon //is the mode set to beacon delivery, and is the beacon in a valid location?
+	data["canBuyBeacon"] = cooldown <= 0 && D.account_balance >= BEACON_COST
+	data["beaconError"] = usingBeacon && !canBeacon ? "(BEACON ERROR)" : ""//changes button text to include an error alert if necessary
+	data["hasBeacon"] = beacon != null//is there a linked beacon?
+	data["beaconName"] = beacon ? beacon.name : "No Beacon Found"
+	data["printMsg"] = cooldown > 0 ? "Print Beacon for [BEACON_COST] credits ([cooldown])" : "Print Beacon for [BEACON_COST] credits"//buttontext for printing beacons
+	data["supplies"] = list()
+	message = "Sales are near-instantaneous - please choose carefully."
+	if(SSshuttle.supplyBlocked)
+		message = blockade_warning
+	if(usingBeacon && !beacon)
+		message = "BEACON ERROR: BEACON MISSING"//beacon was destroyed
+	else if (usingBeacon && !canBeacon)
+		message = "BEACON ERROR: MUST BE EXPOSED"//beacon's loc/user's loc must be a turf
+	if(obj_flags & EMAGGED)
+		message = "(&!#@ERROR: ROUTING_#PROTOCOL MALF(*CT#ON. $UG%ESTE@ ACT#0N: !^/PULS3-%E)ET CIR*)ITB%ARD."
+	data["message"] = message
+	data["group_selected"] = group_selected
+	for(var/group in SSshuttle.supply_packs_groups) //this looks through the packs for categories
+		if(!data["supplies"][group])
+			data["supplies"][group] = list(
+				"name" = group,
+				"packs" = list()
+			)
+			data["supplies"][group]["packs"] += list(list(
+			))
+
+
+	return data
+
 
 /obj/machinery/computer/cargo/express/ui_act(action, params, datum/tgui/ui)
 	switch(action)
@@ -135,6 +177,9 @@
 			usingBeacon = TRUE
 			if (beacon)
 				beacon.update_status(SP_READY) //turns on the beacon's ready light
+		if("select_group")
+			group_selected = params["group"]
+			. = TRUE
 		if("printBeacon")
 			var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_CAR)
 			if(D)

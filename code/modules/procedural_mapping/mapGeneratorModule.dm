@@ -33,37 +33,39 @@
 	var/clustering = 0
 	var/skipLoopIteration = FALSE
 
-	//Turfs don't care whether atoms can be placed here
-	for(var/turfPath in spawnableTurfs)
 
-		//Clustering!
-		if(clusterMax && clusterMin)
+	if(checkPlaceTurf(T))
+		//stop clobbering all the turfs 2k19
+		for(var/turfPath in spawnableTurfs)
 
-			//You're the same as me? I hate you I'm going home
-			if(clusterCheckFlags & CLUSTER_CHECK_SAME_TURFS)
-				clustering = rand(clusterMin,clusterMax)
-				for(var/turf/F in RANGE_TURFS(clustering,T))
-					if(istype(F,turfPath))
-						skipLoopIteration = TRUE
-						break
-				if(skipLoopIteration)
-					skipLoopIteration = FALSE
-					continue
+			//Clustering!
+			if(clusterMax && clusterMin)
 
-			//You're DIFFERENT to me? I hate you I'm going home
-			if(clusterCheckFlags & CLUSTER_CHECK_DIFFERENT_TURFS)
-				clustering = rand(clusterMin,clusterMax)
-				for(var/turf/F in RANGE_TURFS(clustering,T))
-					if(!(istype(F,turfPath)))
-						skipLoopIteration = TRUE
-						break
-				if(skipLoopIteration)
-					skipLoopIteration = FALSE
-					continue
+				//You're the same as me? I hate you I'm going home
+				if(clusterCheckFlags & CLUSTER_CHECK_SAME_TURFS)
+					clustering = rand(clusterMin,clusterMax)
+					for(var/turf/F in RANGE_TURFS(clustering,T))
+						if(istype(F,turfPath))
+							skipLoopIteration = TRUE
+							break
+					if(skipLoopIteration)
+						skipLoopIteration = FALSE
+						continue
 
-		//Success!
-		if(prob(spawnableTurfs[turfPath]))
-			T.ChangeTurf(turfPath)
+				//You're DIFFERENT to me? I hate you I'm going home
+				if(clusterCheckFlags & CLUSTER_CHECK_DIFFERENT_TURFS)
+					clustering = rand(clusterMin,clusterMax)
+					for(var/turf/F in RANGE_TURFS(clustering,T))
+						if(!(istype(F,turfPath)))
+							skipLoopIteration = TRUE
+							break
+					if(skipLoopIteration)
+						skipLoopIteration = FALSE
+						continue
+
+			//Success!
+			if(prob(spawnableTurfs[turfPath]))
+				T.ChangeTurf(turfPath)
 
 
 	//Atoms DO care whether atoms can be placed here
@@ -100,23 +102,25 @@
 			if(prob(spawnableAtoms[atomPath]))
 				new atomPath(T)
 
-	. = 1
+	. = TRUE
 
 
 //Checks and Rejects dense turfs
 /datum/mapGeneratorModule/proc/checkPlaceAtom(turf/T)
-	. = 1
+	. = TRUE
 	if(!T)
-		return 0
+		return FALSE
 	if(T.density)
-		. = 0
+		. = FALSE
 	for(var/atom/A in T)
 		if(A.density)
-			. = 0
+			. = FALSE
 			break
 	if(!allowAtomsOnSpace && (isspaceturf(T)))
-		. = 0
+		. = FALSE
 
+/datum/mapGeneratorModule/proc/checkPlaceTurf(turf/T) //Will always be true unless overriden
+	. = TRUE
 
 ///////////////////////////////////////////////////////////
 //                 PREMADE BASE TEMPLATES                //

@@ -14,6 +14,7 @@
 	refill_canister = /obj/item/vending_refill/sustenance
 	default_price = 0
 	extra_price = 0
+	onstation = FALSE //makes it free to buy things from it
 	payment_department = NO_FREEBIES
 
 /obj/item/vending_refill/sustenance

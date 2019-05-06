@@ -331,6 +331,9 @@
 
 /mob/living/carbon/human/proc/hardset_dna(ui, list/mutation_index, newreal_name, newblood_type, datum/species/mrace, newfeatures, list/mutations, force_transfer_mutations)
 //Do not use force_transfer_mutations for stuff like cloners without some precautions, otherwise some conditional mutations could break (timers, drill hat etc)
+	if(!dna)
+		create_dna() //what the fuck
+
 	if(newfeatures)
 		dna.features = newfeatures
 

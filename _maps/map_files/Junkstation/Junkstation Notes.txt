@@ -1,0 +1,132 @@
+=======MISC=======
+-One of the loot shuttles in arrivals with the 1 vacuum gap
+ should be fixable (computer) and powered (pacman or something) to charlie-station Z-level.
+-No AI minisat, 
+
+
+=======Command=======
+-Suffers from a tragic lack of lighting fixtures
+	-The ones which are installed are broken.
+-Who put all these banana peels, soap, and space lube here?
+
+
+=======Security=======
+-No tasers
+-They get lots of crowbars and stun batons
+-Easily accessible room of ED-209s and Beepskys for superior law enforcement.
+	-This also means a single officer or warden can do a lot of work.
+		-This is good, since anons seem to hate playing security.
+-Prison has to be micromanaged by warden.
+-Execution disposal should be (one of) the only deep-space facing disposals.
+-Security needs a permabrig with activities
+-Security should be armed with lethal weapons instead of tasers.
+	-Get zaers to port the hold-up mechanics.
+
+
+=======Medical=======
+-The only cryo is showers
+-Chemistry has cheap lighters for chem heaters (or microwave???)
+-Chemistry has one pile of dirt to grow ~p~l~a~n~t~s~ drugs.
+-Possibly adding drums of various base chemicals instead of chem-dispenser
+	-Stops chemshitters from making 30 second black powder maxcaps.
+	-Needs engineering or science to make them a dispenser
+-Surgery is ROBUST
+	-Has organ/limb synthesizer machine
+	-Has to beg chemistry for synthflesh
+	-This is now Dr. Frankenstein's laboratory
+	-No prosthetics machine, use the flesh.
+-Genetics has MANY boxes of monkey cubes for making surgery victims/revive-bodies.
+-NO CLONING MACHINE! Surgery is ignored except for meme augs/surgeries because of this.
+	-Science or Engineering can just build one if they really need it.
+	-Add paper note about the "Lazarus Procedure"
+		1) Copy genetics of dead guy to a monkey, humanizing it.
+		2) Scoop the human brain, then monkey
+		3) Human brain in new body, acting quickly
+		4) Defibrillate completed human, reviving them
+	-Pretty sure you can use the procedure on husks, but they won't look the same.
+-Medical should have blood and gibs on the floors, and no mop-bot.
+	-If anything, have an emagged mop-bot in a closet that adds more blood.
+-Genetics and Virology share a pool of test subjects.
+-Virology isn't airlocked, still has a shower and sink in an anteroom, though.
+
+
+=======Cargo=======
+-Powered by one (or more) big PACMAN generator(s).
+	-Mining can bring plasma for this.
+	-Quartermaster has a shotgun (beanbag?) to open emitter crates.
+		-Everything spirals out of control from here. PLAY SECURITY!
+	-Quartmaster has a stunprod	
+	-Quartermaster office doesn't have a working door, climb through the window.
+	-Boxed mules can be unboxed for delivery.
+	-Something else that troubles cargo should be added. Maybe only half the doors work.
+	-Allow cargo to go full ancap/cargonia in power distribution.
+		-Recquiring all recreation departments to swear allegiance/pay rent.
+	-Mining shouldn't start out with KA's
+		-Shitters can meme plasma cutters so fast by dual wielding KA's
+		  that it ruins the comfy.
+
+
+=======Recreation=======
+-Contains bar, dorms, janitor, botany, library, law-office, chapel, kitchen, and clown
+-maybe throw in a gym, too.
+-Shares power from cargo. Yes, the whole thing. 
+	-Cargo will demand engineering give them power.
+-Botany is surrounded by carp spawns but protected by a multi-layered window
+	-Middle layer is shock grilles, but it probably won't hold forever.
+	-On the plus side, renewable source of carpotoxin.
+-Botany should have some cows or something, and a comfy shed.
+-Botany has dirt piles instead of trays and the turf is grass.
+-Janitor gets a space suit to clean up outside trash.
+-Clown gets an airhorn, and some other pranks as I find them.
+-Kitchen is actually inside of the large restroom. Includes toilets and showers.
+	-Table with icky food
+	-Morgue disposal should shoot into a receptacle for the "kitchen"
+
+
+=======Science=======
+-Robotics only has ghetto surgery tools
+-Xenobiology has fewer slime cages (3-4)
+-Xenobiology has AYY LMAO dissection room
+	-Complete with some neurotoxin supply for safe handling.
+		-Includes smoke dispenser so you can neuro-smoke them.
+	-Possibly starts with 1-2 eggs
+		-Feasible since lavaland usually seems to have a nest.
+		-Admins can bully people who abuse eggs.
+		-Only RD can open the shutters anyway.
+	-Deads will come back just to get gassed and surgerized
+		>the first transexual ayy
+		-Also there's just a chance in general that they'll escape.
+-Xenobiology also has only ghetto surgery tools.
+-Science has everything made out of wood.
+	-If there is no mining:
+		>cry
+		>dismantle station
+-Science has supermatter shard and associated chamber to power itself
+	-3 rad collectors, beg engineering for more you pleb.
+-Consider including a holo-projector for the toxins bomb-test site. Experiment with cameras.
+-Telescience should exist
+	-Contains the teleporter normally in command
+	-Contains some quantum pads
+	-Contains bluespace launch pad
+-Remember to add nanites room
+-TOXINS WILL BE ROBUST
+
+
+
+=======Engineering=======
+-Everyone is retarded and doesn't know how to set up supermatter
+	-Probably have tesla instead
+	-Science is already doing mini-supermatter anyway.
+-Swap to fusion/miniature sun if I ever code it.
+	-Miniature sun does not move.
+	-Miniature sun explicitly cannot eat reinforced floors.
+		-Everything else is fair game, though.
+	-Sun size is determined by total pressure of gases on center tile.
+	-Sun continuously spits out oxygen & plasma which needs to be siphoned out
+	-Sun continuously ignites nearby tiles. This often includes people.
+	-Looking at a small sun can blind you for a while.
+	-Looking at a medium sun will permanently blind you.
+	-Looking at a large sun may burn your eyes out.
+-waaaaah everyone should suck engineering's tit for power why all departments have powerr??!1!
+	-Engineers are eternally lazy.
+	-Engineers have patchwork to do already.

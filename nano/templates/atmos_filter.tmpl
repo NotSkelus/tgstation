@@ -1,0 +1,29 @@
+<div class="item">
+	<div class="itemLabel">
+		Power:
+	</div>
+	<div class="itemContent">
+		{{:~link(data.on ? 'On' : 'Off', 'power', {'action' : 'power'} )}}
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Transfer Rate:
+	</div>
+	<div class="itemContent">
+		<div style="clear: both; padding-top: 4px;">
+			{{:~link('SET', 'pencil', {'action' : 'rate', 'rate' : 'input'}, null)}}
+			{{:~link('MAX', 'plus', {'action' : 'rate', 'rate' : 'max'}, (data.rate >= data.max_rate) ? 'disabled' : null)}}
+			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:~round(data.rate)}} L&nbsp;</div>
+		</div>
+	</div>
+</div>
+
+<h4>Filter :</h4>
+<div class="item">
+{{for data.filter_types}}
+	{{:~link(name, selected ? 'circlesmall-close' : 'circlesmall-empty' , {'action' : 'filter', 'mode' : id}, null, selected ? 'selected' : null)}}
+{{/for}}
+
+</div>

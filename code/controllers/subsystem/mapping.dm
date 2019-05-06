@@ -34,6 +34,7 @@ SUBSYSTEM_DEF(mapping)
 	var/datum/space_level/transit
 	var/datum/space_level/empty_space
 	var/num_of_res_levels = 1
+	var/awaymaps = list()
 
 //dlete dis once #39770 is resolved
 /datum/controller/subsystem/mapping/proc/HACK_LoadMapConfig()
@@ -73,6 +74,12 @@ SUBSYSTEM_DEF(mapping)
 	// Pick a random away mission.
 	if(CONFIG_GET(flag/roundstart_away))
 		createRandomZlevel()
+
+	// Load the virtual reality hub
+	if(CONFIG_GET(flag/virtual_reality))
+		to_chat(world, "<span class='boldannounce'>Loading virtual reality...</span>")
+		load_new_z_level("_maps/RandomZLevels/VR/vrhub.dmm", "Virtual Reality Hub")
+		to_chat(world, "<span class='boldannounce'>Virtual reality loaded.</span>")
 
 
 	// Generate mining ruins

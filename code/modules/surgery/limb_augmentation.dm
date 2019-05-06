@@ -22,9 +22,9 @@
 
 
 /datum/surgery_step/replace_limb/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
+	var/obj/item/bodypart/aug = tool
 	if(istype(tool, /obj/item/organ_storage) && istype(tool.contents[1], /obj/item/bodypart))
 		tool = tool.contents[1]
-	var/obj/item/bodypart/aug = tool
 	if(aug.status != BODYPART_ROBOTIC)
 		to_chat(user, "<span class='warning'>That's not an augment, silly!</span>")
 		return -1

@@ -58,6 +58,8 @@
 
 /datum/config_entry/flag/force_random_names
 
+/datum/config_entry/flag/force_random_appearances
+
 /datum/config_entry/flag/humans_need_surnames
 
 /datum/config_entry/flag/allow_ai	// allow ai job
@@ -271,6 +273,8 @@
 /datum/config_entry/number/outdated_movedelay/animal_delay
 	movedelay_type = /mob/living/simple_animal
 /////////////////////////////////////////////////
+
+/datum/config_entry/flag/virtual_reality	//Will virtual reality be loaded
 
 /datum/config_entry/flag/roundstart_away	//Will random away mission be loaded.
 

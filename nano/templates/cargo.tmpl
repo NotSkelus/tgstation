@@ -105,8 +105,14 @@
 	{{for prop.packs}}
 		<div class ="line">
 		<div class="itemLabel"><abbr title="{{>desc}}"> {{:name}}</abbr></div> 
-		<div class="floatRight">{{:~link('Buy Directly', null, {'action': 'add','id': id, 'self_paid' : 1}, null)}}</div>
-		<div class="floatRight">{{:~link(cost + 'Credits', null, {'action': 'add','id': id, 'self_paid' : 0}, null)}}</div>
+		<div class="floatRight"><abbr title="Pay with your bank account instead of the cargo budget. Costs 10% extra for handling fees.">
+			{{:~link('Buy Directly', null, {'action': 'add','id': id, 'self_paid' : 1}, null)}}
+			</abbr>
+		</div>
+		<div class="floatRight"><abbr title="{{>desc}}">
+			{{:~link(cost + 'Credits', null, {'action': 'add','id': id, 'self_paid' : 0}, null)}}
+			</abbr>
+			</div>
 		</div>
 	{{/for}}
 {{/props}}

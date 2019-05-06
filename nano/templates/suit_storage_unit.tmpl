@@ -1,0 +1,66 @@
+{{if data.occupied && data.safeties}}
+  <div class="notice">
+    <span>Biological entity detected in contents. Please remove.</span>
+  </div>
+{{/if}}
+{{if data.uv_active}}
+  <div class="notice">
+    <span>Contents are being decontaminated. Please wait.</span>
+  </div>
+{{else}}
+<h3>Storage</h3>
+  <div class="item line">
+    <span>
+      {{if !data.open}}{{:~link(data.locked ? 'Unlock' : 'Lock', data.locked ? 'unlocked' : 'locked', {'action' : 'lock'}   ) }} {{/if}}
+	  
+	  
+      {{if !data.locked}}{{:~link(data.open ? 'Close' : 'Open', data.locked ? 'unlocked' : 'locked', {'action' : 'door'}   ) }} {{/if}}
+    </span>
+	
+    {{if data.locked}}
+      <div class="notice">
+        <span>Unit Locked</span>
+      </div>
+    {{else data.open}}
+		<div class="item">
+			<div class="itemLabel">
+			Helmet:
+		</div>
+		<div class="itemContent">
+			{{:~link(data.helmet ? data.helmet : 'Empty', data.helmet ? 'circlesmall-full' : 'circlesmall-empty', {'action' : 'dispense', 'item' : 'helmet'},  data.helmet ? null : 'disabled') }}
+		</div>
+		</div>
+
+		<div class="item">
+			<div class="itemLabel">
+			Suit:
+		</div>
+		<div class="itemContent">
+			{{:~link(data.suit ? data.suit : 'Empty', data.suit? 'circlesmall-full' : 'circlesmall-empty', {'action' : 'dispense', 'item' : 'suit'}, data.suit ? null : 'disabled') }}
+		</div>
+		</div>
+		
+		<div class="item">
+			<div class="itemLabel">
+			Mask:
+		</div>
+		<div class="itemContent">
+			{{:~link(data.mask ? data.mask : 'Empty', data.mask? 'circlesmall-full' : 'circlesmall-empty', {'action' : 'dispense', 'item' : 'mask'}, data.mask ? null : 'disabled') }}
+		</div>
+		</div>
+		
+		<div class="item">
+			<div class="itemLabel">
+			Storage:
+		</div>
+		<div class="itemContent">
+			{{:~link(data.storage ? data.storage : 'Empty', data.storage? 'circlesmall-full' : 'circlesmall-empty' ,{'action' : 'dispense', 'item' : 'storage'}, data.storage ? null : 'disabled') }}
+		</div>
+		</div>
+		
+	
+    {{else}}
+		{{:~link('Decontaminate', null, {'action' : 'uv'}, (data.occupied && data.safeties)? 'disabled' : null) }}
+    {{/if}}
+  </div>
+{{/if}}

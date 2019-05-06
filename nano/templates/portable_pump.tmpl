@@ -1,0 +1,80 @@
+<h3>Pump Status</h3>
+<div class="item">
+	<div class="itemLabel">
+		Pump Pressure:
+	</div>
+	<div class="itemContent">
+		{{:data.pressure}} kPa
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Port Status:
+	</div>
+	<div class="itemContent">
+		{{:data.connected ? '<span class="good">Connected</span>' : '<span class="average">Disconnected</span>'}}
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+	Direction:
+	</div>
+  <div class="itemContent">
+	{{:~link('In', 'arrowreturn-1-n', {'action' : 'direction'}, (data.direction == 'in') ? 'selected' : null)}}{{:~link('Out', 'arrowreturn-1-s', {'action' : 'direction'}, (data.direction == 'in') ? null : 'selected')}}
+ </div>
+</div>
+
+<h3>Holding Tank Status</h3>
+{{if data.holding}}
+	<div class="item">
+		<div class="itemLabel">
+			Tank Label:
+		</div>
+		<div class="itemContent">
+			<div style="float: left; width: 180px;">{{:data.holding.name}}</div> {{:~link('Eject', 'eject', {'action' :'eject'})}}
+		</div>
+	</div>
+
+	<div class="item">
+		<div class="itemLabel">
+			Tank Pressure:
+		</div>
+		<div class="itemContent">
+			{{:data.holding.pressure}} kPa
+		</div>
+	</div>
+{{else}}
+	<div class="item"><span class="average"><i>No holding tank inserted.</i></span></div>
+	<div class="item">&nbsp;</div>
+{{/if}}
+
+
+
+<h3>Valve Status</h3>
+<div class="item">
+	<div class="itemLabel">
+		Target Pressure:
+	</div>
+	<div class="itemContent">
+		{{:data.target_pressure}} kPa
+		{{:~displayBar(data.target_pressure, data.min_pressure, data.max_pressure)}}
+		<div style="clear: both; padding-top: 4px;">
+			{{:~link('Reset', 'refresh', {'action' : 'pressure', 'pressure' : 'reset'}, (data.target_pressure != data.default_pressure) ? null : 'disabled')}}
+			{{:~link('Min', 'minus', {'action' : 'pressure', 'pressure' : 'min'}, (data.target_pressure > data.min_pressure) ? null : 'disabled')}}
+			{{:~link('Set', 'pencil', {'action' : 'pressure', 'pressure' : 'input'}, null)}}
+			{{:~link('Max', 'plus', {'action' : 'pressure', 'pressure' : 'max'}, (data.target_pressure < data.max_pressure) ? null : 'disabled')}}
+		</div>
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Power:
+	</div>
+	<div class="itemContent">
+		{{:~link('Open', 'unlocked', {'action' : 'power'}, data.on ? 'selected' : null)}}{{:~link('Close', 'locked', {'action' : 'power'}, data.on ? null : 'selected')}}
+	</div>
+</div>
+

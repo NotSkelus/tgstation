@@ -69,7 +69,7 @@
 
 /datum/outfit/ashwalker
 	name ="Ashwalker"
-	head = /obj/item/clothing/head/helmet/gladiator
+	head = /obj/item/clothing/head/helmet/gladiator/ash
 	uniform = /obj/item/clothing/under/gladiator/ash_walker
 
 

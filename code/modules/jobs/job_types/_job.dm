@@ -94,6 +94,8 @@
 		H.account_id = bank_account.account_id
 	if(CONFIG_GET(flag/enforce_human_authority) && (title in GLOB.command_positions))
 		if(H.dna.species.id != "human")
+			if(H.gender != MALE && H.gender != FEMALE)
+				H.gender = pick(MALE,FEMALE)
 			H.set_species(/datum/species/human)
 			H.apply_pref_name("human", preference_source)
 

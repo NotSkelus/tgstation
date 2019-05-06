@@ -26,6 +26,9 @@
 		/obj/item/t_scanner/adv_mining_scanner,
 		/obj/item/stack/cable_coil/cyborg)
 	emag_modules = list(/obj/item/borg/stun)
+	ratvar_modules = list(
+		/obj/item/clockwork/slab/cyborg/mommi,
+		/obj/item/clockwork/replica_fabricator/cyborg)
 	magpulsing = TRUE
 
 /obj/item/robot_module/mommi/do_transform_animation()

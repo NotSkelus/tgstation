@@ -149,7 +149,7 @@
 
 /obj/machinery/doorButtons/airlock_controller/proc/onlyOpen(obj/machinery/door/airlock/A)
 	if(A)
-		busy = CLOSING
+		busy = OPENING
 		update_icon()
 		openDoor(A)
 
@@ -178,8 +178,11 @@
 
 /obj/machinery/doorButtons/airlock_controller/proc/cycleClose(obj/machinery/door/airlock/A)
 	if(!A || !exteriorAirlock || !interiorAirlock)
+		goIdle(1)
 		return
+	stoplag(1)
 	if(exteriorAirlock.density == interiorAirlock.density || !A.density)
+		goIdle(1)
 		return
 	busy = CYCLE
 	update_icon()
@@ -193,13 +196,16 @@
 /obj/machinery/doorButtons/airlock_controller/proc/cycleOpen(obj/machinery/door/airlock/A)
 	if(!A)
 		goIdle(1)
+	stoplag(1)
 	if(A == exteriorAirlock)
 		if(interiorAirlock)
 			if(!interiorAirlock.density || !interiorAirlock.locked)
+				goIdle(1)
 				return
 	else
 		if(exteriorAirlock)
 			if(!exteriorAirlock.density || !exteriorAirlock.locked)
+				goIdle(1)
 				return
 	if(busy != OPENING)
 		busy = OPENING

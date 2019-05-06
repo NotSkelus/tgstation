@@ -67,9 +67,9 @@
 	to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
 	update_icon()
 
-/obj/structure/tank_dispenser/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, \
-										datum/tgui/master_ui = null, datum/ui_state/state = GLOB.physical_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/structure/tank_dispenser/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = FALSE, \
+										datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.physical_state)
+	ui = SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "tank_dispenser", name, 275, 100, master_ui, state)
 		ui.open()

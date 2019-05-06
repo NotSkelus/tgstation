@@ -3,6 +3,9 @@
 	typepath = /datum/round_event/brain_trauma
 	weight = 25
 
+	earliest_start = 60 MINUTES
+	min_players = 5 //serb dead
+
 /datum/round_event/brain_trauma
 	fakeable = FALSE
 

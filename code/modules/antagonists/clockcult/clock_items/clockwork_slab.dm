@@ -51,6 +51,9 @@
 /obj/item/clockwork/slab/cyborg/engineer //two scriptures, plus a fabricator
 	quickbound = list(/datum/clockwork_scripture/abscond, /datum/clockwork_scripture/create_object/replicant, /datum/clockwork_scripture/create_object/sigil_of_transmission)
 
+/obj/item/clockwork/slab/cyborg/mommi //two scriptures, plus a fabricator //separate from the engi one in case of changes
+	quickbound = list(/datum/clockwork_scripture/abscond, /datum/clockwork_scripture/create_object/replicant, /datum/clockwork_scripture/create_object/sigil_of_transmission)
+
 /obj/item/clockwork/slab/cyborg/medical //five scriptures, plus a spear
 	quickbound = list(/datum/clockwork_scripture/abscond, /datum/clockwork_scripture/ranged_ability/linked_vanguard, /datum/clockwork_scripture/ranged_ability/sentinels_compromise, \
 	/datum/clockwork_scripture/create_object/vitality_matrix)
@@ -294,7 +297,7 @@
 			dat += "<font color=#BE8700><b>Transgression:</b></font> Stuns the first non-Servant to cross it for ten seconds and blinds others nearby. Disappears on use.<br>"
 			dat += "<font color=#BE8700><b>Submission:</b></font> Converts the first non-Servant to stand on the sigil for seven seconds. Disappears on use.<br>"
 			dat += "<font color=#BE8700><b>Matrix:</b></font> Drains health from non-Servants, producing Vitality. Can heal and revive Servants.<br>"
-			dat += "<font color=#BE8700><b>Accession:</b></font> Identical to the Sigil of Submission, but doesn't disappear on use. It can also convert a single mindshielded target, but will disappear after doing this.<br>"
+			dat += "<font color=#BE8700><b>Accession:</b></font> Identical to the Sigil of Submission, but doesn't disappear on use. It can also convert a single loyalty implanted target, but will disappear after doing this.<br>"
 			dat += "<font color=#BE8700><b>Transmission:</b></font> Drains and stores power for clockwork structures. Feeding it brass sheets will create additional power.<br><br>"
 			dat += "<font color=#BE8700 size=3>-=-=-=-=-=-</font>"
 		if("Components")
@@ -359,9 +362,9 @@
 			The mania motor, however, is generally unreliable and unlocked later, only converting those who stand near it for an extended period.<br><br>"
 			dat += "<font color=#BE8700><b>Converting Humans:</b></font> For obvious reasons, humans are the most common conversion target. Because every crew member is different, and \
 			may be armed with different equipment, you should take precautions to ensure that they aren't able to resist. If able, removing a headset is essential, as is restraining \
-			them through handcuffs, cable ties, or other restraints. Some crew, like security, are also implanted with mindshield implants; these will prevent conversion and must be \
+			them through handcuffs, cable ties, or other restraints. Some crew, like security, are also implanted with loyalty implants; these will prevent conversion and must be \
 			surgically removed before they are an eligible convert. <i>Note:</i> The captain is <i>never</i> an eligible convert and should instead be killed or imprisoned. If security \
-			begins administering mindshield implants, this will greatly inhibit conversion. Also note that mindshield implants can be broken by a sigil of accession automatically, but \
+			begins administering loyalty implants, this will greatly inhibit conversion. Also note that loyalty implants can be broken by a sigil of accession automatically, but \
 			the sigil will disappear.<br><br>"
 			dat += "<font color=#BE8700><b>Converting Silicons:</b></font> Due to their robotic nature, silicons are generally more predictable than humans in terms of conversion. \
 			However, they are also much, much harder to subdue, especially cyborgs. The easiest way to convert a cyborg is by using Geis to restrain them, then dragging them to a sigil \

@@ -116,9 +116,9 @@
 		var/move_mode = old_area.beforeShuttleMove(shuttle_areas)											//areas
 
 		var/list/old_contents = oldT.contents
-		for(var/k in 1 to old_contents.len)
+		for(var/k in old_contents)
 			CHECK_TICK
-			var/atom/movable/moving_atom = old_contents[k]
+			var/atom/movable/moving_atom = k
 			if(moving_atom.loc != oldT) //fix for multi-tile objects
 				continue
 			move_mode = moving_atom.beforeShuttleMove(newT, rotation, move_mode, src)						//atoms

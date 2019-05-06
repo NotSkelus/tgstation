@@ -113,7 +113,7 @@
 /obj/effect/countdown/supermatter
 	name = "supermatter damage"
 	text_size = 1
-	color = "#00ff80"
+	color = "#800080" //Purple looks much better against the crystal
 
 /obj/effect/countdown/supermatter/get_value()
 	var/obj/machinery/power/supermatter_crystal/S = attached_to

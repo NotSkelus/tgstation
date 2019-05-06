@@ -339,6 +339,26 @@
 			T.visible_message("<span class='userdanger'>Magic flows out of [src] and into [user]!</span>")
 			user.mind.make_Wizard()
 
+/obj/effect/fakerod //fake rod prop for wiz academy
+	name = "immovable rod"
+	desc = "What the fuck is that?"
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "immrod"
+	move_force = INFINITY
+	move_resist = INFINITY
+	pull_force = INFINITY
+	density = TRUE
+	anchored = TRUE
+
+/obj/effect/fakerod/ex_act(severity, target)
+	return 0
+
+/obj/effect/fakerod/singularity_act()
+	return
+
+/obj/effect/fakerod/singularity_pull()
+	return
+
 /datum/outfit/butler
 	name = "Butler"
 	uniform = /obj/item/clothing/under/suit_jacket/really_black

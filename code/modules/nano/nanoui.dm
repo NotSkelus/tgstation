@@ -244,15 +244,16 @@
  /**
   * Add default data to the data being sent to the ui.
   *
-  * @param data /list The list of data to be modified
+  * @param
   *
-  * @return /list modified data
+  * @return /list data to add
   */
 /datum/nanoui/proc/get_default_data()
 	. = list(
 			"status" = status,
-			"user" = list("name" = user.name)
-		)
+			"user" = list("name" = user.name),
+			"screen" = 	ui_screen,
+			)
 	return
 
 
@@ -418,22 +419,19 @@
 	var/action = href_list["action"]
 	var/params = href_list; params -= "action"
 
-/*
-	if(href_list["nanoui:initialize"])
-		user << output(url_encode(get_json(initial_data)), "[custom_browser_id ? window_id : "[window_id].browser"]:initialize")
-		initialized = TRUE
-	if(href_list["nanoui:view"])
-		if(href_list["screen"])
-			ui_screen = href_list["screen"]
-		SSnanoui.update_uis(src_object)
-	if(href_list["nanoui:link"])
-		user << link(href_list["url"])
 
-	else
-*/
-	update_status(push = 0) // Update the window state.
-	if(src_object.ui_act(action, params, src, state)) // Call ui_act() on the src_object.
-		SSnanoui.update_uis(src_object) // Update if the object requested it.
+	if(user?.client?.nanodebug)
+		to_chat(user, "SENT: [href]")
+
+	switch(action)
+		if("nano:view")
+			if(params["screen"])
+				ui_screen = params["screen"]
+			SSnanoui.update_uis(src_object)
+		else
+			update_status(push = 0) // Update the window state.
+			if(src_object.ui_act(action, params, src, state)) // Call ui_act() on the src_object.
+				SSnanoui.update_uis(src_object) // Update if the object requested it.
 
  /**
   * private

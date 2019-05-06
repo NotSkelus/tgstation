@@ -1,0 +1,66 @@
+<script id="scrubbing_types" type="text/x-jsrender">
+{{include ~idtag=data.id_tag}}
+
+{{for data.filter_types}}
+	{{:~link(gas_name, enabled ? 'circlesmall-close' : 'circlesmall-empty' , {'action' : 'toggle_filter', 'val' : gas_id, 'id_tag': ~idtag}, null, enabled ? 'selected' : null)}}
+{{/for}}
+{{/include}}
+</script>
+
+<h3>Scrubber Status</h3>
+<div class="item">
+	<div class="itemLabel">
+		Internal Pressure:
+	</div>
+	<div class="itemContent">
+		{{:data.pressure}} kPa
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Port Status:
+	</div>
+	<div class="itemContent">
+		{{:data.connected ? '<span class="good">Connected</span>' : '<span class="average">Disconnected</span>'}}
+	</div>
+</div>
+
+<h3>Holding Tank Status</h3>
+{{if data.holding}}
+	<div class="item">
+		<div class="itemLabel">
+			Tank Label:
+		</div>
+		<div class="itemContent">
+			<div style="float: left; width: 180px;">{{:data.holding.name}}</div> {{:~link('Eject', 'eject', {'action' :'eject'})}}
+		</div>
+	</div>
+
+	<div class="item">
+		<div class="itemLabel">
+			Tank Pressure:
+		</div>
+		<div class="itemContent">
+			{{:data.holding.pressure}} kPa
+		</div>
+	</div>
+{{else}}
+	<div class="item"><span class="average"><i>No holding tank inserted.</i></span></div>
+	<div class="item">&nbsp;</div>
+{{/if}}
+
+
+<h3>Filters</h3>
+
+<div class="item">
+	<div class="itemLabel">
+		Power:
+	</div>
+	<div class="itemContent">
+		{{:~link(data.on? 'On' : 'Off', 'power', {'action' : 'power'}, null, data.on? 'selected' : null )}}
+	</div>
+</div>
+
+
+{{include tmpl="#scrubbing_types"/}}

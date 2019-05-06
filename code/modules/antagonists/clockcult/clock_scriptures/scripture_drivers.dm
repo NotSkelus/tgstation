@@ -55,7 +55,7 @@
 	whispered = TRUE
 	object_path = /obj/effect/clockwork/sigil/submission
 	creator_message = "<span class='brass'>A luminous sigil appears below you. Any non-Servants to cross it will be converted after 8 seconds if they do not move.</span>"
-	usage_tip = "This is the primary conversion method, though it will not penetrate mindshield implants."
+	usage_tip = "This is the primary conversion method, though it will not penetrate loyalty implants."
 	tier = SCRIPTURE_DRIVER
 	one_per_tile = TRUE
 	primary_component = HIEROPHANT_ANSIBLE
@@ -199,6 +199,10 @@
 
 /datum/clockwork_scripture/abscond/scripture_effects()
 	var/take_pulling = invoker.pulling && isliving(invoker.pulling) && get_clockwork_power(ABSCOND_ABDUCTION_COST)
+	if(!GLOB.servant_spawns.len && !GLOB.ark_of_the_clockwork_justiciar)
+		if(invoker.client)
+			animate(invoker.client, color = client_color, time = 25)
+		return //bomb out if no reebe and no ark
 	var/turf/T = GLOB.ark_of_the_clockwork_justiciar ? get_step(GLOB.ark_of_the_clockwork_justiciar, SOUTH) : get_turf(pick(GLOB.servant_spawns))
 	invoker.visible_message("<span class='warning'>[invoker] flickers and phases out of existence!</span>", \
 	"<span class='bold sevtug_small'>You feel a dizzying sense of vertigo as you're yanked back to Reebe!</span>")

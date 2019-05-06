@@ -111,8 +111,8 @@
 	host_mob.remove_trait(TRAIT_SHOCKIMMUNE, "nanites")
 
 /datum/nanite_program/mindshield
-	name = "Mental Barrier"
-	desc = "The nanites form a protective membrane around the host's brain, shielding them from abnormal influences while they're active."
+	name = "Loyalty"
+	desc = "The nanites form a protective membrane around the host's brain, making them more loyal to Nanotrasen."
 	use_rate = 0.40
 	rogue_types = list(/datum/nanite_program/brain_decay, /datum/nanite_program/brain_misfire)
 

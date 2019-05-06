@@ -183,9 +183,7 @@
 		if(efficiency > 5 && prob(20))
 			H.easy_randmut(POSITIVE)
 		if(efficiency < 3 && prob(50))
-			var/mob/M = H.easy_randmut(NEGATIVE+MINOR_NEGATIVE)
-			if(ismob(M))
-				H = M
+			H.easy_randmut(NEGATIVE+MINOR_NEGATIVE)
 
 	H.silent = 20 //Prevents an extreme edge case where clones could speak if they said something at exactly the right moment.
 	occupant = H
@@ -193,6 +191,7 @@
 	if(!clonename)	//to prevent null names
 		clonename = "clone ([rand(1,999)])"
 	H.real_name = clonename
+	H.dna.generate_unique_enzymes() //Should always have DNA at this point!
 
 	icon_state = "pod_1"
 	//Get the clone body ready

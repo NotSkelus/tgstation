@@ -419,8 +419,16 @@
 	resistance_flags = NONE
 
 /obj/item/clothing/under/gladiator/ash_walker
+	allowed = null
+	body_parts_covered = CHEST|ARMS|GROIN
+	strip_delay = 60
+	equip_delay_other = 40
+	max_integrity = 250
+	resistance_flags = NONE
+	armor = list("melee" = 10, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 15, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
 	desc = "This gladiator uniform appears to be covered in ash and fairly dated."
 	has_sensor = NO_SENSORS
+
 
 /obj/item/clothing/under/sundress
 	name = "sundress"

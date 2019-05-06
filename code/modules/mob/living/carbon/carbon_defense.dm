@@ -287,9 +287,9 @@
 
 
 /mob/living/carbon/flash_act(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
-	if(NOEYES in dna?.species?.species_traits)
+	if(NOFLASH in dna?.species?.species_traits)
 		return
-	var/obj/item/organ/eyes/eyes = getorganslot(ORGAN_SLOT_EYES)
+	var/obj/item/organ/eyes/eyes = getorganslot(ORGAN_SLOT_EYES) //technically parent will fail regardless if eyes are lacking, but noping out here prevents two get_eye_protection() calls
 	if(!eyes) //can't flash what can't see!
 		return
 

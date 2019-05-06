@@ -93,6 +93,9 @@
 	if(istype(O, /obj/item/organ_storage))
 		return //Borg organ bags shouldn't be killing brains
 
+	if(istype(O, /obj/item/mmi)) //you shouldn't kill it with an MMI
+		return
+
 	if(damaged_brain && O.is_drainable() && O.reagents.has_reagent("mannitol")) //attempt to heal the brain
 		. = TRUE //don't do attack animation.
 		if(brain_death || brainmob?.health <= HEALTH_THRESHOLD_DEAD) //if the brain is fucked anyway, do nothing

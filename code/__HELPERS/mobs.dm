@@ -227,7 +227,7 @@ GLOBAL_LIST_EMPTY(species_list)
 		checked_health["health"] = health
 	return ..()
 
-/proc/do_after(mob/user, var/delay, needhand = 1, atom/target = null, progress = 1, datum/callback/extra_checks = null)
+/proc/do_after(mob/user, var/delay, needhand = TRUE, atom/target = null, progress = TRUE, datum/callback/extra_checks = null, needloc = TRUE)
 	if(!user)
 		return 0
 	var/atom/Tloc = null
@@ -274,10 +274,11 @@ GLOBAL_LIST_EMPTY(species_list)
 				. = 0
 				break
 
-		if(!QDELETED(Tloc) && (QDELETED(target) || Tloc != target.loc))
-			if((Uloc != Tloc || Tloc != user) && !drifting)
-				. = 0
-				break
+		if(needloc)
+			if(!QDELETED(Tloc) && (QDELETED(target) || Tloc != target.loc))
+				if((Uloc != Tloc || Tloc != user) && !drifting)
+					. = 0
+					break
 
 		if(needhand)
 			//This might seem like an odd check, but you can still need a hand even when it's empty
@@ -379,7 +380,7 @@ GLOBAL_LIST_EMPTY(species_list)
 	var/list/spawned_mobs = new(amount)
 
 	for(var/j in 1 to amount)
-		var/atom/movable/X 
+		var/atom/movable/X
 
 		if (istype(spawn_type, /list))
 			var/mob_type = pick(spawn_type)

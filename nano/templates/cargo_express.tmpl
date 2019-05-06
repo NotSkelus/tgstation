@@ -1,0 +1,65 @@
+<div class="notice">
+  {{if data.siliconUser }}
+      <div class="itemLabel">Interface Lock</div>
+	<div class="itemContent">
+	 {{:~link(data.locked ? 'Engaged' : 'Disengaged', data.locked ? 'locked' : 'unlocked', {'action' : 'lock'}, null)}}
+    </div>
+  {{else}}
+    <span>Swipe a QM-Level ID card to {{:data.locked ? "unlock" : "lock"}} this interface.</span>
+  {{/if}}
+</div>
+
+{{if !data.locked}}
+<div class="statusDisplay">
+<h3>Express Cargo Console</h3>
+  <div class="item">
+  <div class="itemLabel">Landing Location</div>
+	<div class="itemContent">
+	{{:~link('Cargo Bay', null, {'action' : 'LZCargo'}, data.usingBeacon ? null : 'selected' ) }}
+	{{:~link(data.beaconzone + ' [' +  data.beaconName + ']', null, {'action' : 'LZBeacon'}, data.hasBeacon ? (!data.usingBeacon ? null : 'selected') : 'disabled' ) }}
+	{{:~link(data.printMsg, null, {'action' : 'printBeacon'}, data.canBuyBeacon ? null : 'disabled' ) }}		
+
+  </div>
+  </div><br/>
+  <div class="item">
+  <div class="itemLabel">Credits</div>
+	<div class="itemContent">
+    <span>{{:~floor(data.points)}}</span>
+  </div>
+  <div class="itemLabel">CentCom Message</div>
+      <div class = "itemContent"><span>{{:data.message}}</span></div>
+  </div><br/>
+
+</div>
+
+{{include ~sel=data.group_selected}}
+<div class="statusDisplay">
+<h3>Ordering</h3>
+<div class ="item">
+{{props data.supplies}}
+	{{:~link(key, null, {'action': 'select_group', 'group' : key}, (~sel == key)? 'selected' : null  )}}
+{{/props}}
+</div>
+<div class="statusValue line candystripe">
+<br/>
+{{props data.supplies}}
+	{{if key == ~sel}}
+	{{for prop.packs}}
+		<div class ="line">
+		<div class="itemLabel"><abbr title="{{>desc}}"> {{:name}}</abbr></div> 
+		<div class="floatRight"><abbr title="{{>desc}}">
+			{{:~link(cost + 'Credits', null, {'action': 'add','id': id}, null)}}
+			</abbr>
+			</div>
+		</div>
+	{{/for}}
+	{{/if}}
+{{/props}}
+</div>
+</div>
+{{/include}}
+{{/if}}
+
+
+
+

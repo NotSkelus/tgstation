@@ -253,6 +253,11 @@
 	desc = "Time seems to flow very slowly around these tiles."
 	floor_tile = /obj/item/stack/tile/sepia
 
+/turf/open/floor/fake_sepia
+	icon_state = "sepia"
+	desc = "A grungy old tile."
+	floor_tile = /obj/item/stack/tile/sepia
+//Need a whole new tileset that included faded department colours.
 
 /turf/open/floor/bronze
 	name = "bronze floor"

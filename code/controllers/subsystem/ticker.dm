@@ -194,8 +194,10 @@ SUBSYSTEM_DEF(ticker)
 	var/init_start = world.timeofday
 		//Create and announce mode
 	var/list/datum/game_mode/runnable_modes
+	var/list/datum/game_mode/adjusted_runnable_modes
 	if(GLOB.master_mode == "random" || GLOB.master_mode == "secret")
 		runnable_modes = config.get_runnable_modes()
+		adjusted_runnable_modes = runnable_modes //used for deleting invalid modes
 
 		if(GLOB.master_mode == "secret")
 			hide_mode = 1
@@ -206,16 +208,10 @@ SUBSYSTEM_DEF(ticker)
 				else
 					mode = smode
 
-		if(!mode)
-			if(!runnable_modes.len)
-				to_chat(world, "<B>Unable to choose playable game mode.</B> Reverting to pre-game lobby.")
-				return 0
-			mode = pickweight(runnable_modes)
-			if(!mode)	//too few roundtypes all run too recently
-				mode = pick(runnable_modes)
+
 
 	else
-		mode = config.pick_mode(GLOB.master_mode)
+		mode = config.pick_mode(GLOB.master_mode) //this is just for non-random/secret modes
 		if(!mode.can_start())
 			to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players and [mode.required_enemies] eligible antagonists needed. Reverting to pre-game lobby.")
 			qdel(mode)
@@ -223,23 +219,33 @@ SUBSYSTEM_DEF(ticker)
 			SSjob.ResetOccupations()
 			return 0
 
-	CHECK_TICK
-	//Configure mode and assign player to special mode stuff
-	var/can_continue = 0
-	can_continue = src.mode.pre_setup()		//Choose antagonists
-	CHECK_TICK
-	can_continue = can_continue && SSjob.DivideOccupations() 				//Distribute jobs
-	CHECK_TICK
+	var/done = 0
+	while(!done)
+		if(!mode)
+			if(!adjusted_runnable_modes.len)
+				mode = new /datum/game_mode/extended() //bomb out if no modes
+			else
+				mode = pickweight(adjusted_runnable_modes)
+				if(!mode)	//too few roundtypes all run too recently
+					mode = pick(adjusted_runnable_modes)
+		CHECK_TICK
+		//Configure mode and assign player to special mode stuff
+		var/can_continue = 0
+		can_continue = src.mode.pre_setup()		//Choose antagonists
+		CHECK_TICK
+		can_continue = can_continue && SSjob.DivideOccupations() 				//Distribute jobs
+		CHECK_TICK
 
-	if(!GLOB.Debug2)
-		if(!can_continue)
-			log_game("[mode.name] failed pre_setup, cause: [mode.setup_error]")
-			QDEL_NULL(mode)
-			to_chat(world, "<B>Error setting up [GLOB.master_mode].</B> Reverting to pre-game lobby.")
-			SSjob.ResetOccupations()
-			return 0
-	else
-		message_admins("<span class='notice'>DEBUG: Bypassing prestart checks...</span>")
+		if(!GLOB.Debug2)
+			if(!can_continue)
+				log_game("[mode.name] failed pre_setup, cause: [mode.setup_error]")
+				adjusted_runnable_modes.Remove(mode)
+				mode.clean_up_special_roles()
+				QDEL_NULL(mode)
+				continue
+		else
+			message_admins("<span class='notice'>DEBUG: Bypassing prestart checks...</span>")
+		done = 1
 
 	CHECK_TICK
 	if(hide_mode)
@@ -410,7 +416,7 @@ SUBSYSTEM_DEF(ticker)
 		queued_players.len = 0
 		queue_delay = 0
 		return
-		
+
 	queue_delay++
 	var/mob/dead/new_player/next_in_line = queued_players[1]
 

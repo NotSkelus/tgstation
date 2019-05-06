@@ -37,7 +37,8 @@
 	var/starter = 0
 	var/rpm = 0
 	var/rpmtarget = 0
-	var/capacity = 1e6
+	var/capacity = 2e3 //In moles
+	var/vent_multiplier = 1e6
 	var/comp_id = 0
 	var/efficiency
 
@@ -78,6 +79,8 @@
 		stat |= BROKEN
 
 
+/obj/machinery/power/compressor/return_analyzable_air()
+	return gas_contained
 #define COMPFRICTION 5e5
 
 
@@ -130,10 +133,10 @@
 	var/datum/gas_mixture/environment = inturf.return_air()
 
 	// It's a simplified version taking only 1/10 of the moles from the turf nearby. It should be later changed into a better version
-
 	var/transfer_moles = environment.total_moles()/10
-	var/datum/gas_mixture/removed = inturf.remove_air(transfer_moles)
-	gas_contained.merge(removed)
+	if(gas_contained.total_moles() + transfer_moles < capacity) //don't take it over capacity
+		var/datum/gas_mixture/removed = inturf.remove_air(transfer_moles)
+		gas_contained.merge(removed)
 
 // RPM function to include compression friction - be advised that too low/high of a compfriction value can make things screwy
 
@@ -195,7 +198,7 @@
 		compressor.locate_machinery()
 
 /obj/machinery/power/turbine/process()
-
+	var/outturf_open = CanAtmosPass(outturf)
 	if(!compressor)
 		stat = BROKEN
 
@@ -208,21 +211,28 @@
 	// This is the power generation function. If anything is needed it's good to plot it in EXCEL before modifying
 	// the TURBGENQ and TURBGENG values
 
-	lastgen = ((compressor.rpm / TURBGENQ)**TURBGENG) * TURBGENQ * productivity
+	if(outturf_open)
+		lastgen = ((compressor.rpm / TURBGENQ)**TURBGENG) * TURBGENQ * productivity
+	else
+		lastgen = 0 //can't generate if it cannot output
 
 	add_avail(lastgen)
 
+
 	// Weird function but it works. Should be something else...
 
-	var/newrpm = ((compressor.gas_contained.temperature) * compressor.gas_contained.total_moles())/4
-
+	var/newrpm = 0
+	if(outturf_open) //cuck infinite power works if the output vent is closed
+		newrpm = ((compressor.gas_contained.temperature) * compressor.gas_contained.total_moles())/4
+	else
+		compressor.rpmtarget = 0 //make it want to stop if it can't output
 	newrpm = max(0, newrpm)
 
 	if(!compressor.starter || newrpm > 1000)
 		compressor.rpmtarget = newrpm
 
-	if(compressor.gas_contained.total_moles()>0)
-		var/oamount = min(compressor.gas_contained.total_moles(), (compressor.rpm+100)/35000*compressor.capacity)
+	if(outturf_open && compressor.gas_contained.total_moles()>0)
+		var/oamount = min(compressor.gas_contained.total_moles(), ((compressor.rpm+100)/35000)*compressor.vent_multiplier)
 		var/datum/gas_mixture/removed = compressor.gas_contained.remove(oamount)
 		outturf.assume_air(removed)
 
@@ -292,6 +302,14 @@
 
 
 
+/obj/machinery/power/turbine/CanAtmosPass(turf/T)
+	var/R = FALSE
+	if(T.blocks_air)
+		R = TRUE
+	for(var/obj/O in T.contents)
+		if(!O.CanAtmosPass(T))
+			R = TRUE
+	return !R
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

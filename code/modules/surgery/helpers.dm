@@ -49,7 +49,7 @@
 			var/datum/surgery/S = available_surgeries[P]
 
 			for(var/datum/surgery/other in M.surgeries)
-				if(other.location == S.location)
+				if(other.location == selected_zone)
 					return //during the input() another surgery was started at the same location.
 
 			//we check that the surgery is still doable after the input() wait.

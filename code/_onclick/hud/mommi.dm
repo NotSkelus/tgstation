@@ -116,6 +116,10 @@
 	static_inventory += using
 	mymobM.hat_slot = using
 
+	using = new/obj/screen/language_menu //They can't speak, but it's there if they get emagged/ratvared
+	using.screen_loc = ui_borg_language_menu
+	static_inventory += using
+
 //Headlamp control
 	using = new /obj/screen/robot/lamp()
 	using.screen_loc = ui_borg_lamp

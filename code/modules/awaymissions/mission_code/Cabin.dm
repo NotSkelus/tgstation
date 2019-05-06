@@ -103,8 +103,15 @@
 
 /datum/mapGeneratorModule/snow/checkPlaceAtom(turf/T)
 	if(istype(T, /turf/open/floor/plating/asteroid/snow))
-		return ..(T)
-	return 0
+		. = ..()
+	else
+		. = FALSE
+
+/datum/mapGeneratorModule/bottomlayer/snow/checkPlaceTurf(turf/T)
+	if(istype(T, /turf/open/floor/plating/asteroid/snow))
+		. = ..()
+	else
+		. = FALSE
 
 /datum/mapGeneratorModule/bottomlayer/snow
 	spawnableTurfs = list(/turf/open/floor/plating/asteroid/snow/atmosphere = 100)
@@ -126,7 +133,7 @@
 
 /datum/mapGeneratorModule/snow/bunnies
 	//spawnableAtoms = list(/mob/living/simple_animal/chicken/rabbit/normal = 0.1)
-	spawnableAtoms = list(/mob/living/simple_animal/chicken/rabbit = 0.5)
+	spawnableAtoms = list(/mob/living/simple_animal/chicken/rabbit = 0.4)
 
 /datum/mapGeneratorModule/snow/randIceRocks
 	spawnableAtoms = list(/obj/structure/flora/rock/icy = 5, /obj/structure/flora/rock/pile/icy = 5)

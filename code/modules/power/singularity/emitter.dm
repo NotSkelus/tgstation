@@ -50,6 +50,7 @@
 
 /obj/machinery/power/emitter/ctf
 	name = "Energy Cannon"
+	resistance_flags = INDESTRUCTIBLE | FIRE_PROOF | ACID_PROOF
 	active = TRUE
 	active_power_usage = FALSE
 	idle_power_usage = FALSE
@@ -57,6 +58,32 @@
 	req_access_txt = "100"
 	state = EMITTER_WELDED
 	use_power = FALSE
+	idle_power_usage = 0
+	active_power_usage = 0
+
+/obj/machinery/power/emitter/ctf/RefreshParts()
+	return
+
+/obj/machinery/power/emitter/energycannon
+	name = "Energy Cannon"
+	desc = "A heavy duty industrial laser."
+	icon = 'icons/obj/singularity.dmi'
+	icon_state = "emitter_+a"
+	anchored = TRUE
+	density = TRUE
+	resistance_flags = INDESTRUCTIBLE | FIRE_PROOF | ACID_PROOF
+
+	use_power = NO_POWER_USE
+	idle_power_usage = 0
+	active_power_usage = 0
+
+	active = TRUE
+	locked = TRUE
+	state = EMITTER_WELDED
+
+/obj/machinery/power/emitter/energycannon/RefreshParts()
+	return
+
 
 /obj/machinery/power/emitter/Initialize()
 	. = ..()
@@ -225,6 +252,8 @@
 	return P
 
 /obj/machinery/power/emitter/can_be_unfasten_wrench(mob/user, silent)
+	if(resistance_flags & INDESTRUCTIBLE)
+		return FAILED_UNFASTEN
 	if(active)
 		if(!silent)
 			to_chat(user, "<span class='warning'>Turn \the [src] off first!</span>")
@@ -252,6 +281,9 @@
 /obj/machinery/power/emitter/welder_act(mob/living/user, obj/item/I)
 	if(active)
 		to_chat(user, "Turn \the [src] off first.")
+		return TRUE
+
+	if(resistance_flags & INDESTRUCTIBLE)
 		return TRUE
 
 	switch(state)

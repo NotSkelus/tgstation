@@ -1,0 +1,51 @@
+<div class="item">
+	<div class="itemLabel">
+		Power:
+	</div>
+	<div class="itemContent">
+		{{:~link(data.on? 'On' : 'Off', 'power', {'action' : 'power' }, null, data.on ? 'selected' : null ) }}
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Output pressure:
+	</div>
+	<div class="itemContent">
+		<div>
+			{{:~link('SET', null, {'action' : 'pressure', 'pressure' : 'input'}, null ) }}
+			{{:~link('MAX', null, {'action' : 'pressure', 'pressure' : 'max'},(data.set_pressure == data.max_pressure) ? 'disabled' : null ) }}
+			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:~round(data.set_pressure)}} kPa&nbsp;</div>
+		</div>
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Node 1:
+	</div>
+	<div class="itemContent">
+		<div>
+			{{:~link('-', null, {'action' : 'node1', 'concentration' : '-0.1'}, null)}}
+			{{:~link('-', null, {'action' : 'node1', 'concentration' : '-0.01'}, null)}}
+			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:data.node1_concentration}} %&nbsp;</div>
+			{{:~link('+', null, {'action' : 'node1', 'concentration' : '0.01'}, null)}}
+			{{:~link('+', null, {'action' : 'node1', 'concentration' : '0.1'}, null)}}
+		</div>
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Node 2:
+	</div>
+	<div class="itemContent">
+		<div>
+			{{:~link('-', null, {'action' : 'node2', 'concentration' : '-0.1'}, null)}}
+			{{:~link('-', null, {'action' : 'node2', 'concentration' : '-0.01'}, null)}}
+			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:data.node2_concentration}} %&nbsp;</div>
+			{{:~link('+', null, {'action' : 'node2', 'concentration' : '0.01'}, null)}}
+			{{:~link('+', null, {'action' : 'node2', 'concentration' : '0.1'}, null)}}
+		</div>
+	</div>
+</div>

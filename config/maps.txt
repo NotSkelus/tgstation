@@ -38,5 +38,6 @@ endmap
 
 map Junkstation
 	#default
+	disabled
 	#Metastation should be the default when making a pull request.
 endmap

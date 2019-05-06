@@ -44,15 +44,7 @@
 		return
 	if(!chassis || chassis.occupant != owner)
 		return
-	chassis.is_currently_ejecting = TRUE
-	to_chat(owner, "<span class='notice'>You begin the ejection procedure. Equipment is disabled during this process. Hold still to finish ejecting.<span>")
-	if(do_after(chassis.occupant,chassis.exit_delay, target = chassis))
-		to_chat(owner, "<span class='notice'>You exit the mech.<span>")
-		chassis.go_out()
-	else
-		to_chat(owner, "<span class='notice'>You stop exiting the mech. Weapons are enabled again.<span>")
-	chassis.is_currently_ejecting = FALSE
-
+	chassis.container_resist(chassis.occupant)
 
 /datum/action/innate/mecha/mech_toggle_internals
 	name = "Toggle Internal Airtank Usage"
@@ -264,14 +256,14 @@
 		return
 	var/new_damtype
 	switch(chassis.damtype)
-		if("tox")
-			new_damtype = "brute"
+		if(TOX)
+			new_damtype = BRUTE
 			chassis.occupant_message("Your exosuit's hands form into fists.")
-		if("brute")
-			new_damtype = "fire"
+		if(BRUTE)
+			new_damtype = BURN
 			chassis.occupant_message("A torch tip extends from your exosuit's hand, glowing red.")
-		if("fire")
-			new_damtype = "tox"
+		if(BURN)
+			new_damtype = TOX
 			chassis.occupant_message("A bone-chillingly thick plasteel needle protracts from the exosuit's palm.")
 	chassis.damtype = new_damtype
 	button_icon_state = "mech_damtype_[new_damtype]"

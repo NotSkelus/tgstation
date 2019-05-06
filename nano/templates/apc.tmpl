@@ -1,0 +1,221 @@
+{{if data.failTime}}
+<div class='notice'>
+	<b><h3>SYSTEM FAILURE</h3></b>
+	<i>I/O regulators malfunction detected! Waiting for system reboot...</i><br/>
+	Automatic reboot in {{:data.failTime}} seconds...
+	{{:~link('Reboot Now', null, {'action' : 'reboot'}, null) }}<br><br><br>
+</div>
+{{else}}
+<div class='notice'>
+	{{if data.siliconUser}}
+		<div class="itemContentSmall">
+			Interface Lock:
+		</div>
+		<div class="itemContentFull">
+			{{:~link('Engaged', 'locked', {'action' : 'lock'}, data.locked ? 'selected' : null)}}{{:~link('Disengaged', 'unlocked', {'action' : 'lock'}, data.malfStatus >= 2 ? 'linkOff' : (data.locked ? null : 'selected'))}}
+		</div>
+		<div class="clearBoth"></div>
+	{{else}}
+		{{if data.locked}}
+			Swipe an ID card to unlock this interface.
+		{{else}}
+			Swipe an ID card to lock this interface.
+		{{/if}}
+	{{/if}}
+</div>
+
+<div style="min-width: 480px">
+
+	<h3>Power Status</h3>
+
+	<div class="item">
+		<div class="itemLabel">
+			Main Breaker:
+		</div>
+		<div class="itemContent">
+			{{if data.locked && !data.siliconUser}}
+				{{if data.isOperating}}
+					<span class='good'>On</span>
+				{{else}}
+					<span class='bad'>Off</span>
+				{{/if}}
+			{{else}}
+				{{:~link('On', 'power', {'action' : 'breaker'}, data.isOperating ? 'selected' : null)}}{{:~link('Off', 'close', {'action' : 'breaker'}, data.isOperating ? null : 'selected')}}
+			{{/if}}
+		</div>
+	</div>
+
+	<div class="item">
+		<div class="itemLabel">
+			External Power:
+		</div>
+		<div class="itemContent">
+			{{if data.externalPower == 2}}
+				<span class='good'>Good</span>
+			{{else data.externalPower == 1}}
+				<span class='average'>Low</span>
+			{{else}}
+				<span class='bad'>None</span>
+			{{/if}}
+		</div>
+	</div>
+
+	<div class="item">
+		<div class="itemLabel">
+			Power Cell:
+		</div>
+		{{if data.powerCellStatus == null}}
+			<div class="itemContent bad">		
+				Power cell removed.
+			</div>
+		{{else}}
+			<div class="itemContent" style="width: 60px">		
+				{{:~round(data.powerCellStatus*10)/10}}%
+			</div>	
+			{{:~displayBar(data.powerCellStatus, 0, 100, data.powerCellStatus >= 50 ? 'good' : data.powerCellStatus >= 25 ? 'average' : 'bad')}}
+		{{/if}}
+	</div>
+
+	{{if data.powerCellStatus != null}}
+		<div class="item">
+			<div class="itemLabel">
+				Charge Mode:
+			</div>
+			<div class="itemContent">
+				{{if data.locked && !data.siliconUser}}
+					{{if data.chargeMode}}
+						<span class='good'>Auto</span>
+					{{else}}
+						<span class='bad'>Off</span>
+					{{/if}}				
+				{{else}}
+					{{:~link('Auto', 'refresh', {'action' : 'charge'}, data.chargeMode ? 'selected' : null)}}{{:~link('Off', 'close', {'action' : 'charge'}, data.chargeMode ? null : 'selected')}}
+				{{/if}}
+				&nbsp;
+				{{if data.chargingStatus > 1}}
+					[<span class='good'>Fully Charged</span>]
+				{{else data.chargingStatus == 1}}
+					[<span class='average'>Charging</span>]
+				{{else}}
+					[<span class='bad'>Not Charging</span>]
+				{{/if}}
+			</div>
+		</div>
+	{{/if}}
+
+
+	<h3>Power Channels</h3>
+
+	{{for data.powerChannels}}
+		<div class="item">
+			<div class="itemLabel">
+				{{:title}}:
+			</div>
+			<div class="itemContent" style="width: 70px; text-align: right">
+				{{:powerLoad}}
+			</div>
+			<div class="itemContent" style="width: 105px">
+				&nbsp;&nbsp;
+				{{if status <= 1}}
+					<span class='bad'>Off</span>
+				{{else status >= 2}}
+					<span class='good'>On</span>
+				{{/if}}
+				{{if status == 1 || status == 3}}
+					[Auto]
+				{{else}}
+					[Manual]
+				{{/if}}		
+			</div>
+			{{if !~root.data.locked || ~root.data.siliconUser}}
+				<div class="itemContentFull">
+					{{:~link('Auto', 'refresh', ~mergejson({'action' : 'channel'}, topicParams.auto), (status == 1 || status == 3) ? 'selected' : null)}}
+					{{:~link('On', 'power', ~mergejson({'action' : 'channel'}, topicParams.on), (status == 2) ? 'selected' : null)}}
+					{{:~link('Off', 'close', ~mergejson({'action' : 'channel'}, topicParams.off), (status == 0) ? 'selected' : null)}}
+				</div>
+			{{/if}}
+		</div>
+	{{/for}}
+
+	<div class="item" style="font-weight: bold">
+		<div class="itemLabel">
+			Total Load:
+		</div>
+		<div class="itemContent" style="width: 70px; text-align: right">
+			{{:data.totalLoad}}
+		</div>
+	</div>
+
+	<div class="item">&nbsp;</div>
+
+	<div class="item notice">
+		<div class="itemLabel">
+			<span class="dark">Emergency Light Fallback:</span>
+		</div>
+		<div class="itemContent">
+			{{if data.locked && !data.siliconUser}}
+				{{if data.emergencyLights}}
+					<span>Engaged</span>
+				{{else}}
+					<span>Disengaged</span>
+				{{/if}}
+			{{else}}
+				{{:~link('Engaged', null, {'action' : 'emergency_lighting'}, data.emergencyLights ? 'selected' : null)}}{{:~link('Disengaged', null, {'action' : 'emergency_lighting'}, data.emergencyLights ? null : 'selected')}}
+			{{/if}}
+		</div>
+	</div>
+	<div class="item notice">
+		<div class="itemLabel">
+			<span class="dark">Night Shift Lighting:</span>
+		</div>
+		<div class="itemContent">
+			{{if data.locked && !data.siliconUser}}
+				{{if data.nightshiftLights}}
+					<span>Engaged</span>
+				{{else}}
+					<span>Disengaged</span>
+				{{/if}}
+			{{else}}
+				{{:~link('Engaged', null, {'action' : 'toggle_nightshift'}, data.nightshiftLights ? 'selected' : null)}}{{:~link('Disengaged', null, {'action' : 'toggle_nightshift'}, data.nightshiftLights ? null : 'selected')}}
+			{{/if}}
+		</div>
+	</div>
+	<div class="item notice">
+		<div class="itemLabel">
+			<span class="dark">Cover Lock:</span>
+		</div>
+		<div class="itemContent">
+			{{if data.locked && !data.siliconUser}}
+				{{if data.coverLocked}}
+					<span>Engaged</span>
+				{{else}}
+					<span>Disengaged</span>
+				{{/if}}
+			{{else}}
+				{{:~link('Engaged', 'locked', {'action' : 'cover'}, data.coverLocked ? 'selected' : null)}}{{:~link('Disengaged', 'unlocked', {'action' : 'cover'}, data.coverLocked ? null : 'selected')}}
+			{{/if}}
+		</div>
+	</div>
+
+
+
+	{{if data.siliconUser}}
+		<h3>System Overrides</h3>
+
+		<div class="item">
+			{{:~link('Overload Lighting Circuit', 'lightbulb', {'action' : 'overload'})}}
+			{{if data.malfStatus == 1}}
+				{{:~link('Override Programming', 'script', {'action' : 'hack'})}}
+			{{else data.malfStatus == 2}}
+				{{:~link('Shunt Core Processes', 'arrowreturn-1-s', {'action' : 'occupy'})}}
+			{{else data.malfStatus == 3}}
+				{{:~link('Return to Main Core', 'arrowreturn-1-w', {'action' : 'deoccupy'})}}
+			{{else data.malfStatus == 4}}
+				{{:~link('Shunt Core Processes', 'arrowreturn-1-s', {'action' : 'occupy'}, 'linkOff')}}
+			{{/if}}
+		</div>
+	{{/if}}
+
+</div>
+{{/if}}
+		

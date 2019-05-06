@@ -128,11 +128,11 @@
 	var/datum/pipeline/parent3 = parents[3]
 	parent3.update = TRUE
 
-/obj/machinery/atmospherics/components/trinary/mixer/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, \
-																	datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/machinery/atmospherics/components/trinary/mixer/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = FALSE, \
+																	datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.default_state)
+	ui = SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "atmos_mixer", name, 370, 165, master_ui, state)
+		ui = new(user, src, ui_key, "atmos_mixer", name, 370, 195, master_ui, state, ticks_for_autoupdate = 20)
 		ui.open()
 
 /obj/machinery/atmospherics/components/trinary/mixer/ui_data()

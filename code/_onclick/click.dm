@@ -368,8 +368,9 @@
 		user.listed_turf = T
 		user.client.statpanel = T.name
 
-// Use this instead of /mob/proc/AltClickOn(atom/A) where you only want turf content listing without additional atom alt-click interaction
+// Use this instead of /mob/proc/AltClickOn(atom/A) where you only want turf content listing,but still rotate chairs if that config's on
 /atom/proc/AltClickNoInteract(mob/user, atom/A)
+	SEND_SIGNAL(A, COMSIG_CLICK_ALT, user)
 	var/turf/T = get_turf(A)
 	if(T && user.TurfAdjacent(T))
 		user.listed_turf = T

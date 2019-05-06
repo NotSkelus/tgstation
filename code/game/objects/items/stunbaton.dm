@@ -16,7 +16,7 @@
 	var/status = 0
 	var/obj/item/stock_parts/cell/cell
 	var/hitcost = 1000
-	var/throw_hit_chance = 35
+	var/throw_hit_chance = 100
 	var/preload_cell_type //if not empty the baton starts with this type of cell
 
 /obj/item/melee/baton/get_cell()

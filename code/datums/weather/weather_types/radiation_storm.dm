@@ -27,8 +27,16 @@
 	..()
 	status_alarm(TRUE)
 
+/datum/weather/rad_storm/proc/is_rad_immune(atom/L) //pasta from ash storm
+	while (L && !isturf(L))
+		if(ismecha(L)) //Mechs are immune
+			return TRUE
+		L = L.loc //Check parent items immunities (recurses up to the turf)
+	return FALSE //I'm nuclear
 
 /datum/weather/rad_storm/weather_act(mob/living/L)
+	if(is_rad_immune(L))
+		return
 	var/resist = L.getarmor(null, "rad")
 	if(prob(40))
 		if(ishuman(L))

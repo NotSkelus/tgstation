@@ -1,0 +1,239 @@
+<script id="vents" type="text/x-jsrender">
+<h3>Vent Controls</h3> <span>{{:~link('Back', 'carat-1-w', {'action' : 'nano:view', 'screen' : 'home'} )}}</span><br/><br/>
+	{{for data.vents}}
+	<div>
+		<div class="item">{{:long_name}}</div>
+		<div class="item">
+			<div class="itemLabel">
+				Operating:
+			</div>
+			<div class="itemContent">
+				{{:~link(power ? 'On' : 'Off', null, { 'id_tag' : id_tag, 'action' : 'power', 'val' : power ? 0 : 1}, null, power ? null : 'redButton')}}
+			</div>
+		</div>
+		<div class="item">
+			<div class="itemLabel">
+				Mode:
+			</div>
+			<div class="itemContent">
+				{{:direction == "siphon" ? 'Siphoning' : 'Pressurizing'}}
+			</div>
+		</div>
+		<div class="item">
+			<div class="itemLabel">
+				Pressure Checks:
+			</div>
+			<div class="itemContent">
+				{{:~link('External', null, { 'id_tag' : id_tag, 'action' : 'excheck', 'val' : checks}, null, excheck ? 'selected' : null)}}
+				{{:~link('Internal', null, { 'id_tag' : id_tag, 'action' : 'incheck', 'val' : checks}, null, incheck ? 'selected' : null)}}
+			</div>
+		</div>
+		{{if incheck}}
+		<div class="item">
+			<div class="itemLabel">
+				Internal Target Pressure:
+			</div>
+			<div class="itemContent">
+				{{:~link(~fixed(internal), null, { 'id_tag' : id_tag, 'action' : 'set_internal_pressure'})}}
+				{{:~link('Reset', null, { 'id_tag' : id_tag, 'action' : 'reset_internal_pressure'})}}
+		</div>
+		{{/if}}
+		{{if excheck}}
+		<div class="item">
+			<div class="itemLabel">
+				External Target Pressure:
+			</div>
+			<div class="itemContent">
+				{{:~link(~fixed(external), null, { 'id_tag' : id_tag, 'action' : 'set_external_pressure'})}}
+				{{:~link('Reset', null, { 'id_tag' : id_tag, 'action' : 'reset_external_pressure'})}}
+		</div>
+		</div>
+		{{/if}}
+	</div><HR/>
+		
+  {{else}}
+    <span class='bad'>Error: No vents connected.</span>
+  {{/for}}
+</script>
+
+
+
+<script id="scrubbers" type="text/x-jsrender">
+<h3>Scrubber Controls</h3> <span>{{:~link('Back', 'carat-1-w', {'action' : 'nano:view', 'screen' : 'home'} )}}</span><br/><br/>
+	{{for data.scrubbers}}
+	<div>
+			<div class="item">{{:long_name}}</div>
+			<div class="item">
+				<div class="itemLabel">
+					Operating:
+				</div>
+				<div class="itemContent">
+					{{:~link(power ? 'On' : 'Off', null, { 'id_tag' : id_tag, 'action' : 'power', 'val' : power ? 0 : 1}, null, power ? null : 'danger')}}
+				</div>
+			</div>
+			<div class="item">
+				<div class="itemLabel">
+					Mode:
+				</div>
+				<div class="itemContent">
+					{{:~link(scrubbing ? 'Scrubbing' : 'Siphoning', null, { 'id_tag' : id_tag,  'action' : 'scrubbing', 'val' : scrubbing ? 0 : 1}, null, scrubbing ? null : 'danger')}}
+				</div>
+			</div>
+			<div class="item">
+				<div class="itemLabel">
+					Scrub Range:
+				</div>
+				<div class="itemContent">
+					{{:~link(widenet ? 'Extended' : 'Normal', null, { 'id_tag' : id_tag,  'action' : 'widenet', 'val' : widenet ? 0 : 1}, null, widenet ? 'selected' : null)}}
+				</div>
+			</div>
+			<div class="item">
+				<div class="itemLabel">
+					Filters:
+				</div>
+				<div class="itemContent">
+					{{include ~idtag=id_tag}}
+					{{for filter_types}}
+						{{:~link(gas_name, enabled ? 'circlesmall-close' : 'circlesmall-empty' , {'action' : 'toggle_filter', 'val' : gas_id, 'id_tag': ~idtag}, null, enabled ? 'selected' : null)}}
+					{{/for}}
+					{{/include}}
+				</div>
+			</div>
+		</div><HR/>
+		{{else}}
+		<span class='bad'>Error: No scrubbers connected.</span>
+		{{/if}}
+</script>
+
+
+
+<script id="modes" type="text/x-jsrender">
+<H3>Environmental Modes</H3>{{:~link('Back', 'carat-1-w', {'action' : 'nano:view', 'screen' : 'home'} )}}</span><br/><br/>
+	{{for data.modes}}
+		<div class="item">
+			{{:~link(name, null, { 'action' : 'mode', 'mode' : mode }, null, selected ? (danger ? 'danger' : 'selected') : (danger ? 'bad' : null))}}
+		</div>
+	{{/for}}
+</script>
+
+
+
+<script id="thresholds" type="text/x-jsrender">
+<H3>Alarm Thresholds</H3>{{:~link('Back', 'carat-1-w', {'action' : 'nano:view', 'screen' : 'home'} )}}</span><br/><br/>
+  <table>
+    <thead><tr>
+      <th></th>
+      <th><span class="bad">min2</span></th>
+      <th><span class="average">min1</span></th>
+      <th><span class="average">max1</span></th>
+      <th><span class="bad">max2</span></th>
+    </tr></thead>
+    <tbody>
+      {{for data.thresholds}}<tr>
+        <th>{{:name}}</th>
+        {{for settings}}<td>
+			{{:~link(~fixed(selected, 2), null, {'action' : 'threshold', 'env' : env, 'var' : val } ) }}
+        </td>{{/for}}
+      </tr>{{/for}}
+    </tbody>
+  <table>
+
+
+<style>
+  th, td {
+    padding-right: 16px;
+    text-align: left;
+  }
+</style>
+</script>
+
+
+
+
+
+<div class="notice">
+  {{if data.siliconUser}}
+	<div class="item">
+		<div class="itemLabel">
+			Interface Lock:
+		</div>
+		<div class="itemContent">
+			{{:~link(data.locked? 'Engaged' : 'Disengaged', data.locked? 'locked' : 'unlocked', {'action' : 'lock'}, null)}}
+		</div>
+	</div>
+  {{else}}
+    <span>Swipe an ID card to {{:data.locked ? "unlock" : "lock"}} this interface.</span>
+  {{/if}}
+</div>
+<h3>Air Status:</h3>
+  {{if data.environment_data}}
+    {{for data.environment_data}}
+	<div class="statusLabel">{{:name}}</div>
+      <div class="statusContent">
+  	  <span class={{:danger_level == 2 ? "bad" : danger_level == 1 ? "average" : "good"}}>
+  		{{:~fixed(value, 2)}} {{:unit}}
+  	  </span>
+  	</div>
+    {{/for}}
+	<div class="statusLabel">Local Status</div>
+      <div class="statusContent">
+  	  <span class={{:(data.danger_level == 2) ? "bad" : danger_level == 1 ? "average" : "good"}}>
+  		{{:(data.danger_level == 2) ? "Danger (Internals Required)" : data.danger_level == 1 ? "Caution" : "Optimal"}}
+  	  </span>
+  	</div>
+	<div class="statusLabel">Area Status</div>
+      <div class="statusContent">
+  	  <span class={{:(data.atmos_alarm || data.fire_alarm) ? "bad bold" : "good"}}>
+  		{{:data.atmos_alarm ? "Atmosphere Alarm" : fire_alarm ? "Fire Alarm" : "Nominal"}}
+  	  </span>
+  	</div>
+  {{else}}
+	<div class="statusLabel">Warning</div>
+      <div class="statusContent">
+      <span class="bad bold">Cannot obtain air sample for analysis.</span>
+    </div>
+  {{/if}}
+  {{if data.emagged}}
+	<div class="statusLabel">Warning</div>
+      <div class="statusContent">
+      <span class="bad bold">Safety measures offline. Device may exhibit abnormal behavior.</span>
+    </div>
+  {{/if}}
+
+{{if !data.locked || data.siliconUser}}
+  {{if ui.screen == "home"}}
+      <h3>Air Controls</h3>
+	  <div>
+        <span class="line">
+			{{:~link('Area Atmosphere Alarm', data.atmos_alarm ? "alert" : "notice" ,{ 'action' : data.atmos_alarm ? 'reset' : 'alarm'}, null , data.atmos_alarm ? 'caution' : null )}}
+        </span>
+        <span class="line">
+			{{:~link('Panic Siphon', data.mode == 3 ? "alert" : "notice" ,{ 'action' : 'mode', 'mode' : data.mode == 3 ? '1' : '3' }, null , data.mode ==3 ? 'caution' : null )}}
+
+        </span>
+		<span class="line">
+        <br/>
+		</span>
+        <span class="line">
+			{{:~link('Vent Controls', 'carat-1-n', {'action' : 'nano:view', 'screen' : 'vents' } ) }}
+        </span>
+        <span class="line">
+			{{:~link('Scrubber Controls', 'carat-1-s', {'action' : 'nano:view', 'screen' : 'scrubbers' } ) }}
+        </span>
+        <span class="line">
+			{{:~link('Operating Mode', 'gear', {'action' : 'nano:view', 'screen' : 'modes' } ) }}
+        </span>
+        <span class="line">
+			{{:~link('Alarm Thresholds', 'script', {'action' : 'nano:view', 'screen' : 'thresholds' } ) }}
+        </span>
+      </div>
+  {{else ui.screen == "vents"}}
+    {{include tmpl="#vents" /}}
+  {{else ui.screen == "scrubbers"}}
+    {{include tmpl="#scrubbers" /}}
+  {{else ui.screen == "modes"}}
+    {{include tmpl="#modes" /}}
+  {{else ui.screen == "thresholds"}}
+    {{include tmpl="#thresholds" /}}
+  {{/if}}
+{{/if}}

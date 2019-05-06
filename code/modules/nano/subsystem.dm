@@ -177,9 +177,7 @@
 	// Append the UI to all the lists.
 	ui.user.open_uis |= ui
 	var/list/uis = open_uis[src_object_key][ui.ui_key]
-	spawn(2)
-		if(ui) //hackery
-			ui.update()
+	addtimer(CALLBACK(ui, /datum/nanoui/proc/update), 2)
 	uis |= ui
 	processing_uis |= ui
 

@@ -87,6 +87,10 @@
 			if(!R.shell)
 				R.UnlinkSelf()
 			R.module.rebuild_modules()
+			if(ismommi(R))
+				var/mob/living/silicon/robot/mommi/M = R
+				M.ratvar = 1
+				M.keeper = 0
 		else if(isAI(S))
 			var/mob/living/silicon/ai/A = S
 			A.can_be_carded = FALSE

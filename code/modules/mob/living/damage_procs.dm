@@ -135,7 +135,7 @@
 	if(immobilize)
 		apply_effect(immobilize, EFFECT_IMMOBILIZE, blocked)
 	if(irradiate)
-		apply_effect(irradiate, EFFECT_IRRADIATE, blocked)
+		rad_act(irradiate) //Why not call apply_effect straight off? It doesn't respect rad armor, so this blocks it properly. Additionally, blocked will be recalculated there..
 	if(slur)
 		apply_effect(slur, EFFECT_SLUR, blocked)
 	if(stutter)

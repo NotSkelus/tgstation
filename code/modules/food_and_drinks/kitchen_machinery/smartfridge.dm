@@ -139,8 +139,8 @@
 			O.forceMove(src)
 			return TRUE
 
-/obj/machinery/smartfridge/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/machinery/smartfridge/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = FALSE, datum/nanoui/master_ui = null, datum/ui_state/state = GLOB.default_state)
+	ui = SSnanoui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "smartvend", name, 440, 550, master_ui, state)
 		ui.set_autoupdate(FALSE)
@@ -166,7 +166,7 @@
 
 
 /obj/machinery/smartfridge/handle_atom_del(atom/A) // Update the UIs in case something inside gets deleted
-	SStgui.update_uis(src)
+	SSnanoui.update_uis(src)
 
 /obj/machinery/smartfridge/ui_act(action, params)
 	. = ..()
@@ -281,7 +281,7 @@
 	..()
 	if(drying)
 		if(rack_dry())//no need to update unless something got dried
-			SStgui.update_uis(src)
+			SSnanoui.update_uis(src)
 			update_icon()
 
 /obj/machinery/smartfridge/drying_rack/accept_check(obj/item/O)

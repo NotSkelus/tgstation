@@ -42,7 +42,7 @@ NanoBaseHelpers = function ()
 				{
 					return '<div unselectable="on" class="link ' + iconClass + ' ' + elementClass + ' ' + status + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
 				}
-				
+
 				return '<div unselectable="on" class="link linkActive ' + iconClass + ' ' + elementClass + '" data-href="' + generateHref(parameters) + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
 			},
 			// Round a number to the nearest integer
@@ -56,6 +56,27 @@ NanoBaseHelpers = function ()
 			// Round a number up to integer
 			ceil: function(number) {								
 				return Math.ceil(number);
+			},
+			//Cuts off the extra decimals
+			fixed: function(number, n) {								
+				return number.toFixed(n);
+			},
+			//Encoding
+			htmlencode: function(str) {
+				return $.views.converters.html(str);
+			},
+			//technically deprecated, but >IE8
+			htmldecode: function(str) {
+				return unescape(str);
+			},
+			urlencode: function(str) {
+				return $.views.converters.url(str);
+			},
+			urldecode: function(str) {
+				return decodeURI(str);
+			},
+			mergejson: function(json1, json2) {
+				return $.extend( json1, json2);
 			},
 			// Format a string (~string("Hello {0}, how are {1}?", 'Martin', 'you') becomes "Hello Martin, how are you?")
 			string: function() {		
@@ -200,7 +221,7 @@ NanoBaseHelpers = function ()
 				{
 					queryString += ';';
 				}
-				queryString += key + '=' + parameters[key];
+				queryString += key + '=' + encodeURIComponent(parameters[key]); //Make sure we encode any key so BYOND doesn't split the list at an inopportune time //ENCODING FUCK
 			}
 		}
 		return queryString;

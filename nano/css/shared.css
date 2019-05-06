@@ -18,6 +18,7 @@ hr
 
 a, a:link, a:visited, a:active, .link, .linkOn, .linkOff, .selected, .disabled
 { 
+	display: inline-block;
 	color: #ffffff; 
 	text-decoration: none;
 	background: #40628a;
@@ -41,6 +42,18 @@ a, a:link, a:visited, a:active, .link, .linkOn, .linkOff, .selected, .disabled
     white-space: nowrap;
 }
 
+.danger {
+	background-color: #9d0808;
+}
+.danger:hover {
+	background-color: #ad1818;
+} 
+.caution {
+	background-color: #9a9d00;
+}
+.caution:hover {
+	background-color: #aaad10;
+}
 a:hover, .linkActive:hover
 { 
 	background: #507aac;
@@ -85,7 +98,7 @@ a.white:hover
 a.icon, .linkOn.icon, .linkOff.icon, .selected.icon, .disabled.icon
 {
 	position: relative;
-	padding: 1px 4px 2px 20px;
+	padding: 0px 0px 0px 0px;
 }
 
 a.icon img, .linkOn.icon img, .linkOff.icon img, .selected.icon img, .disabled.icon img
@@ -265,7 +278,7 @@ h4
 
 .notice.icon
 {	
-	padding: 2px 4px 0 20px;
+	padding: 2px 4px 0 4px;
 }
 
 .notice img

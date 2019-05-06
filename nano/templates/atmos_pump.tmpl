@@ -1,0 +1,36 @@
+<div class="item">
+	<div class="itemLabel">
+		Power:
+	</div>
+	<div class="itemContent">
+		{{:~link(data.on? 'On' : 'Off', 'power', {'action' : 'power'}, null, data.on? 'selected' : null )}}
+	</div>
+</div>
+
+{{if data.max_rate}}
+<div class="item">
+	<div class="itemLabel">
+		Transfer rate:
+	</div>
+	<div class="itemContent">
+		<div>
+			{{:~link('SET', null, {'action' : 'rate', 'rate' : 'input'}, null)}}
+			{{:~link('MAX', null, {'action' : 'rate', 'rate' : 'max'}, (data.rate == data.max_rate)? 'disabled' : null )}}
+			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:~round(data.rate)}} L/s&nbsp;</div>
+		</div>
+	</div>
+</div>
+{{else}}
+<div class="item">
+	<div class="itemLabel">
+		Output pressure:
+	</div>
+	<div class="itemContent">
+		<div>
+			{{:~link('SET', null, {'action' : 'pressure', 'pressure' : 'input'}, null)}}
+			{{:~link('MAX', null, {'action' : 'pressure', 'pressure' : 'max'}, (data.pressure == data.max_pressure)? 'disabled': null )}}
+			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:~round(data.pressure)}} kPa&nbsp;</div>
+		</div>
+	</div>
+</div>
+{{/if}}

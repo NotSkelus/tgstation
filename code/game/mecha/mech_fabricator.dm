@@ -9,6 +9,7 @@
 	active_power_usage = 5000
 	req_access = list(ACCESS_ROBOTICS)
 	circuit = /obj/item/circuitboard/machine/mechfab
+	var/datum/component/remote_materials/materials
 	var/time_coeff = 1
 	var/component_coeff = 1
 	var/datum/techweb/specialized/autounlocking/exofab/stored_research
@@ -33,13 +34,10 @@
 								"Misc"
 								)
 
-/obj/machinery/mecha_part_fabricator/Initialize()
-    var/datum/component/material_container/materials = AddComponent(/datum/component/material_container,
-     list(MAT_METAL, MAT_GLASS, MAT_SILVER, MAT_GOLD, MAT_DIAMOND, MAT_PLASMA, MAT_URANIUM, MAT_BANANIUM, MAT_TITANIUM, MAT_BLUESPACE), 0,
-        TRUE, /obj/item/stack, CALLBACK(src, .proc/is_insertion_ready), CALLBACK(src, .proc/AfterMaterialInsert))
-    materials.precise_insertion = TRUE
-    stored_research = new
-    return ..()
+/obj/machinery/mecha_part_fabricator/Initialize(mapload)
+	materials = AddComponent(/datum/component/remote_materials, "lathe", mapload) //forgive me for the materials.mat_container.materials
+	stored_research = new
+	return ..()
 
 /obj/machinery/mecha_part_fabricator/RefreshParts()
 	var/T = 0
@@ -47,8 +45,8 @@
 	//maximum stocking amount (default 300000, 600000 at T4)
 	for(var/obj/item/stock_parts/matter_bin/M in component_parts)
 		T += M.rating
-	GET_COMPONENT(materials, /datum/component/material_container)
-	materials.max_amount = (200000 + (T*50000))
+	var/total_storage = (200000 + (T*50000))
+	materials.set_local_size(total_storage)
 
 	//resources adjustment coefficient (1 -> 0.85 -> 0.7 -> 0.55)
 	T = 1.15
@@ -64,9 +62,8 @@
 
 /obj/machinery/mecha_part_fabricator/examine(mob/user)
 	..()
-	GET_COMPONENT(materials, /datum/component/material_container)
 	if(in_range(user, src) || isobserver(user))
-		to_chat(user, "<span class='notice'>The status display reads: Storing up to <b>[materials.max_amount]</b> material units.<br>Material consumption at <b>[component_coeff*100]%</b>.<br>Build time reduced by <b>[100-time_coeff*100]%</b>.<span>")
+		to_chat(user, "<span class='notice'>The status display reads: Storing up to <b>[materials.mat_container.max_amount]</b> material units.<br>Material consumption at <b>[component_coeff*100]%</b>.<br>Build time reduced by <b>[100-time_coeff*100]%</b>.<span>")
 
 /obj/machinery/mecha_part_fabricator/emag_act()
 	if(obj_flags & EMAGGED)
@@ -109,9 +106,8 @@
 
 /obj/machinery/mecha_part_fabricator/proc/output_available_resources()
 	var/output
-	GET_COMPONENT(materials, /datum/component/material_container)
-	for(var/mat_id in materials.materials)
-		var/datum/material/M = materials.materials[mat_id]
+	for(var/mat_id in materials.mat_container.materials)
+		var/datum/material/M = materials.mat_container.materials[mat_id]
 		output += "<span class=\"res_name\">[M.name]: </span>[M.amount] cm&sup3;"
 		if(M.amount >= MINERAL_MATERIAL_AMOUNT)
 			output += "<span style='font-size:80%;'>- Remove \[<a href='?src=[REF(src)];remove_mat=1;material=[mat_id]'>1</a>\]"
@@ -130,8 +126,9 @@
 /obj/machinery/mecha_part_fabricator/proc/check_resources(datum/design/D)
 	if(D.reagents_list.len) // No reagents storage - no reagent designs.
 		return FALSE
-	GET_COMPONENT(materials, /datum/component/material_container)
-	if(materials.has_materials(get_resources_w_coeff(D)))
+	if(!materials.mat_container || materials.on_hold())
+		return FALSE
+	if(materials.mat_container.has_materials(get_resources_w_coeff(D)))
 		return TRUE
 	return FALSE
 
@@ -140,8 +137,7 @@
 	desc = "It's building \a [initial(D.name)]."
 	var/list/res_coef = get_resources_w_coeff(D)
 
-	GET_COMPONENT(materials, /datum/component/material_container)
-	materials.use_amount(res_coef)
+	materials.mat_container.use_amount(res_coef)
 	add_overlay("fab-active")
 	use_power = ACTIVE_POWER_USE
 	updateUsrDialog()
@@ -384,16 +380,18 @@
 					break
 
 	if(href_list["remove_mat"] && href_list["material"])
-		GET_COMPONENT(materials, /datum/component/material_container)
-		materials.retrieve_sheets(text2num(href_list["remove_mat"]), href_list["material"])
+		var/datum/component/material_container/mat_container = materials.mat_container
+		if (!mat_container)
+			say("No access to material storage, please contact the quartermaster.")
+			return 0
+		if (materials.on_hold())
+			say("Mineral access is on hold, please contact the quartermaster.")
+			return 0
+		materials.mat_container.retrieve_sheets(text2num(href_list["remove_mat"]), href_list["material"], drop_location())
 
 	updateUsrDialog()
 	return
 
-/obj/machinery/mecha_part_fabricator/on_deconstruction()
-	GET_COMPONENT(materials, /datum/component/material_container)
-	materials.retrieve_all()
-	..()
 
 /obj/machinery/mecha_part_fabricator/proc/AfterMaterialInsert(type_inserted, id_inserted, amount_inserted)
 	var/stack_name = material2name(id_inserted)

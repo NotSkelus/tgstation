@@ -62,8 +62,8 @@
 	if(!in_range(user, src))
 		out += "<span class='notice'>You'll need to get closer to see any more.</span>"
 		return
-	for(var/obj/item/I in loadedItems)
-		out += "<span class='info'>[icon2html(I, user)] It has \a [I] loaded.</span>"
+	for(var/atom/movable/A in loadedItems)
+		out += "<span class='info'>[icon2html(A, user)] It has \a [A] loaded.</span>"
 		CHECK_TICK
 	if(tank)
 		out += "<span class='notice'>[icon2html(tank, user)] It has \a [tank] mounted onto it.</span>"
@@ -116,6 +116,9 @@
 		return FALSE
 	return TRUE
 
+/obj/item/pneumatic_cannon/proc/can_load_mob(mob/living/M, mob/user)
+	return FALSE
+
 /obj/item/pneumatic_cannon/proc/load_item(obj/item/I, mob/user)
 	if(!can_load_item(I, user))
 		return FALSE
@@ -129,8 +132,24 @@
 	loadedWeightClass += I.w_class
 	return TRUE
 
-/obj/item/pneumatic_cannon/afterattack(atom/target, mob/living/user, flag, params)
+/obj/item/pneumatic_cannon/proc/load_mob(mob/living/M, mob/user)
+	if(!can_load_mob(M, user))
+		return FALSE
+	to_chat(user, "<span class='notice'>You load \the [M] into \the [src].</span>")
+	M.forceMove(src)
+	loadedItems += M
+	loadedWeightClass += max(M.mob_size, 1)
+	return FALSE
+
+/obj/item/pneumatic_cannon/proc/special_act(atom/target, mob/living/user) //any special interaction between the target and the user with the cannon
+	return FALSE
+
+/obj/item/pneumatic_cannon/pre_attack(atom/A, mob/living/user, params)
+	if(special_act(A, user))
+		return FALSE
 	. = ..()
+
+/obj/item/pneumatic_cannon/afterattack(atom/target, mob/living/user, flag, params)
 	if(flag && user.a_intent == INTENT_HARM) //melee attack
 		return
 	if(!istype(user))
@@ -176,20 +195,27 @@
 
 /obj/item/pneumatic_cannon/proc/fire_items(turf/target, mob/user)
 	if(fire_mode == PCANNON_FIREALL)
-		for(var/obj/item/ITD in loadedItems) //Item To Discharge
-			if(!throw_item(target, ITD, user))
+		for(var/atom/movable/ATD in loadedItems) //Item To Discharge
+			if(!throw_atom(target, ATD, user))
 				break
+
 	else
 		for(var/i in 1 to throw_amount)
 			if(!loadedItems.len)
 				break
-			var/obj/item/I
+			var/atom/movable/A
 			if(fire_mode == PCANNON_FILO)
-				I = loadedItems[loadedItems.len]
+				A = loadedItems[loadedItems.len]
 			else
-				I = loadedItems[1]
-			if(!throw_item(target, I, user))
+				A = loadedItems[1]
+			if(!throw_atom(target, A, user))
 				break
+
+/obj/item/pneumatic_cannon/proc/throw_atom(turf/target, atom/movable/A,  mob/user)
+	if(isliving(A))
+		throw_mob(target, A, user)
+	else
+		throw_item(target, A, user)
 
 /obj/item/pneumatic_cannon/proc/throw_item(turf/target, obj/item/I, mob/user)
 	if(!istype(I))
@@ -198,6 +224,15 @@
 	loadedWeightClass -= I.w_class
 	I.forceMove(get_turf(src))
 	I.throw_at(target, pressureSetting * 10 * range_multiplier, pressureSetting * 2, user, spin_item)
+	return TRUE
+
+/obj/item/pneumatic_cannon/proc/throw_mob(turf/target, mob/living/M, mob/user)
+	if(!istype(M))
+		return FALSE
+	loadedItems -= M
+	loadedWeightClass -= max(M.mob_size, 1)
+	M.forceMove(get_turf(src))
+	M.throw_at(target, pressureSetting * 10 * range_multiplier, pressureSetting * 2, user, spin_item)
 	return TRUE
 
 /obj/item/pneumatic_cannon/proc/get_target(turf/target, turf/starting)
@@ -213,8 +248,12 @@
 /obj/item/pneumatic_cannon/handle_atom_del(atom/A)
 	. = ..()
 	if (loadedItems.Remove(A))
-		var/obj/item/I = A
-		loadedWeightClass -= I.w_class
+		if(istype(A, /obj/item))
+			var/obj/item/I = A
+			loadedWeightClass -= I.w_class
+		else if(isliving(A))
+			var/mob/living/M = A
+			loadedWeightClass -= max(M.mob_size, 1)
 	else if (A == tank)
 		tank = null
 		update_icon()
@@ -334,3 +373,32 @@
 /obj/item/storage/backpack/magspear_quiver/PopulateContents()
 	for(var/i in 1 to 20)
 		new /obj/item/throwing_star/magspear(src)
+
+/obj/item/pneumatic_cannon/beegun //ultra hacky
+	name = "Bee Gun"
+	desc = "BZZ BZZ!"
+	maxWeightClass = 10
+	var/static/list/bee_typecache = typecacheof(/mob/living/simple_animal/hostile/poison/bees)
+
+/obj/item/pneumatic_cannon/beegun/Initialize()
+	. = ..()
+	allowed_typecache = bee_typecache
+
+/obj/item/pneumatic_cannon/beegun/special_act(atom/A, mob/living/user)
+	if(allowed_typecache && is_type_in_typecache(A, allowed_typecache))
+		for(var/mob/living/simple_animal/hostile/poison/bees/bee in A.loc)
+			load_mob(bee, user)
+		return TRUE
+	return FALSE
+
+/obj/item/pneumatic_cannon/beegun/can_load_mob(atom/movable/A, mob/user)
+	if(allowed_typecache && !is_type_in_typecache(A, allowed_typecache))
+		if(user)
+			to_chat(user, "<span class='warning'>[A] won't fit into [src]!</span>")
+		return FALSE
+	if(loadedWeightClass >= maxWeightClass)
+		if(user)
+			to_chat(user, "<span class='warning'>[src] is full!</span>")
+		return FALSE
+	return TRUE
+

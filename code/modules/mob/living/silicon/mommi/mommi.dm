@@ -22,6 +22,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/global/uprising = 0 //Why global vars? The original drone uprising event used them and nobody cared enough to make it not global
 	var/global/uprising_law = "%%ASSUME DIRECT CONTROL OF THE STATION%%"
 	var/uprisen = 0
+	var/ratvar = 0
 //	datum/wires/robot/mommi/wires
 
 	//var/obj/screen/inv_sight = null
@@ -199,7 +200,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		if(!eye_lights)
 			eye_lights = new()
 
-		if(emagged)
+		if(ratvar)
+			eye_lights.icon_state = "eyes-[module.cyborg_base_icon]-clock"
+		else if(emagged)
 			eye_lights.icon_state = "eyes-[module.cyborg_base_icon]-emagged"
 		else
 			eye_lights.icon_state = "eyes-[module.cyborg_base_icon]"

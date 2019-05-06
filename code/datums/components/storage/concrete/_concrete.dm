@@ -63,7 +63,7 @@
 /datum/component/storage/concrete/_insert_physical_item(obj/item/I, override = FALSE)
 	. = TRUE
 	var/atom/real_location = real_location()
-	if(I.loc != real_location)
+	if(real_location && I.loc != real_location)
 		I.forceMove(real_location)
 	refresh_mob_views()
 

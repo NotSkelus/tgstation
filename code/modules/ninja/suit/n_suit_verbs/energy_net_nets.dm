@@ -20,7 +20,8 @@ It is possible to destroy the net by the occupant or someone else.
 	buckle_prevents_pull = TRUE
 	var/mob/living/carbon/affecting//Who it is currently affecting, if anyone.
 	var/mob/living/carbon/master//Who shot web. Will let this person know if the net was successful or failed.
-	var/check = 15//30 seconds before teleportation. Could be extended I guess.
+	var/check = 30//30 seconds before teleportation. Could be extended I guess.
+	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
 	var/success = FALSE
 
 
@@ -79,5 +80,30 @@ It is possible to destroy the net by the occupant or someone else.
 /obj/structure/energy_net/user_buckle_mob(mob/living/M, mob/living/user)
 	return//We only want our target to be buckled
 
-/obj/structure/energy_net/user_unbuckle_mob(mob/living/buckled_mob, mob/living/user)
-	return//The net must be destroyed to free the target
+/obj/structure/energy_net/user_unbuckle_mob(mob/living/buckled_mob, mob/living/user) //can resist out, but it takes some time
+	if(has_buckled_mobs())
+		for(var/buck in buckled_mobs) //breaking a net releases them
+			var/mob/living/M = buck
+			if(M != user) //only the user may pull themselves free, others must break the net
+				return
+			else
+				M.visible_message(\
+					"<span class='warning'>[M.name] struggles to break free from the net!</span>",\
+					"<span class='notice'>You struggle to break free from the net... (Stay still for 10 seconds.)</span>",\
+					"<span class='italics'>You hear struggling...</span>")
+				if(!do_after(M, 100, target = src))
+					if(M && M.buckled)
+						to_chat(M, "<span class='warning'>You fail to unbuckle yourself!</span>")
+					return
+				if(!M.buckled)
+					return
+				M.visible_message(\
+					"<span class='warning'>[M.name] breaks free from the net!</span>",\
+					"<span class='notice'>You break free from the net!</span>",\
+					"<span class='italics'>You hear struggling...</span>")
+
+			unbuckle_mob(M)
+			add_fingerprint(user)
+			qdel(src)
+
+	return

@@ -553,6 +553,7 @@
 /obj/item/projectile/beam/beam_rifle/hitscan/aiming_beam
 	tracer_type = /obj/effect/projectile/tracer/tracer/aiming
 	name = "aiming beam"
+	range = 20
 	hitsound = null
 	hitsound_wall = null
 	nodamage = TRUE

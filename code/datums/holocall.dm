@@ -53,9 +53,10 @@
 //cleans up ALL references :)
 /datum/holocall/Destroy()
 	QDEL_NULL(hangup)
-	for(var/V in eye.visibleCameraChunks) //delete this
-		var/datum/camerachunk/C = V
-		C.remove(eye)
+	if(eye)
+		for(var/V in eye.visibleCameraChunks) //delete this
+			var/datum/camerachunk/C = V
+			C.remove(eye)
 
 	var/user_good = !QDELETED(user)
 	if(user_good)

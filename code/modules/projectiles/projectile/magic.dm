@@ -380,11 +380,12 @@
 	var/weld = TRUE
 	var/created = FALSE //prevents creation of more then one locker if it has multiple hits
 	var/locker_suck = TRUE
-	var/obj/structure/closet/locker_temp_instance = /obj/structure/closet/decay
+	var/locker_type = /obj/structure/closet/decay
+	var/obj/structure/closet/locker_temp_instance
 
 /obj/item/projectile/magic/locker/Initialize()
 	. = ..()
-	locker_temp_instance = new(src)
+	locker_temp_instance = new locker_type(src)
 
 /obj/item/projectile/magic/locker/prehit(atom/A)
 	if(isliving(A) && locker_suck)
@@ -402,7 +403,7 @@
 /obj/item/projectile/magic/locker/on_hit(target)
 	if(created)
 		return ..()
-	var/obj/structure/closet/C = new locker_temp_instance(get_turf(src))
+	var/obj/structure/closet/C = new locker_type(get_turf(src))
 	if(LAZYLEN(contents))
 		for(var/atom/movable/AM in contents)
 			C.insert(AM)
@@ -412,6 +413,7 @@
 	return ..()
 
 /obj/item/projectile/magic/locker/Destroy()
+	QDEL_NULL(locker_temp_instance)
 	locker_suck = FALSE
 	for(var/atom/movable/AM in contents)
 		AM.forceMove(get_turf(src))

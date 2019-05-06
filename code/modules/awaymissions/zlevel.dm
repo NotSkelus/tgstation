@@ -8,6 +8,7 @@ GLOBAL_LIST_INIT(potentialRandomZlevels, generateMapList(filename = "[global.con
 	if(GLOB.potentialRandomZlevels && GLOB.potentialRandomZlevels.len)
 		to_chat(world, "<span class='boldannounce'>Loading away mission...</span>")
 		var/map = pick(GLOB.potentialRandomZlevels)
+		SSmapping.awaymaps += map
 		load_new_z_level(map, "Away Mission")
 		to_chat(world, "<span class='boldannounce'>Away mission loaded.</span>")
 

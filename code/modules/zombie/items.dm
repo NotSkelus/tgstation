@@ -12,7 +12,7 @@
 	var/icon_right = "bloodhand_right"
 	hitsound = 'sound/hallucinations/growl1.ogg'
 	force = 21 // Just enough to break airlocks with melee attacks
-	damtype = "brute"
+	damtype = BRUTE
 
 /obj/item/zombie_hand/Initialize()
 	. = ..()

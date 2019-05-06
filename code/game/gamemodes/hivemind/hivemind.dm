@@ -104,4 +104,4 @@
 /datum/game_mode/hivemind/generate_report()
 	return "Reports of psychic activity have been showing up in this sector, and we believe this may have to do with a containment breach on \[REDACTED\] last month \
 		when a sapient hive intelligence displaying paranormal powers escaped into the unknown. They present a very large risk as they can assimilate people into \
-		the hivemind with ease, although they appear unable to affect mindshielded personnel."
+		the hivemind with ease, although they appear unable to affect loyalty-implanted personnel."

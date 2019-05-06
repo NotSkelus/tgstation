@@ -537,6 +537,10 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Aft Solar Array"
 	icon_state = "yellow"
 
+/area/solar/central
+	name = "Central Solar Array"
+	icon_state = "yellow"
+
 /area/solar/aux/port
 	name = "Port Bow Auxiliary Solar Array"
 	icon_state = "panelsA"
@@ -806,6 +810,10 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Quartermasters"
 	icon_state = "quart"
 
+/area/quartermaster/cargopower
+	name = "Pacmann Array"
+	icon_state = "cargo_bay"
+
 /area/quartermaster/sorting
 	name = "Delivery Office"
 	icon_state = "cargo_delivery"
@@ -860,6 +868,18 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /area/science
 	name = "Science Division"
+	icon_state = "toxlab"
+
+/area/science/telescience
+	name = "Telescience Division"
+	icon_state = "toxlab"
+
+/area/science/supermatter_storage
+	name = "Science Supermatter Storage"
+	icon_state = "toxlab"
+
+/area/science/supermatter_reactor
+	name = "Science Supermatter Generator"
 	icon_state = "toxlab"
 
 /area/science/lab
@@ -1026,6 +1046,10 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /area/ai_monitored/turret_protected/ai
 	name = "AI Chamber"
+	icon_state = "ai_chamber"
+
+/area/ai_monitored/turret_protected/ai/ai_alt
+	name = "AI Workshop"
 	icon_state = "ai_chamber"
 
 /area/ai_monitored/turret_protected/aisat

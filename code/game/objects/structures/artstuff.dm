@@ -65,15 +65,7 @@ GLOBAL_LIST_INIT(globalBlankCanvases, new(AMT_OF_CANVASES))
 	icon_state = "23x23"
 	whichGlobalBackup = 4
 
-//HEY YOU
-//ARE YOU READING THE CODE FOR CANVASES?
-//ARE YOU AWARE THEY CRASH HALF THE SERVER WHEN SOMEONE DRAWS ON THEM...
-//...AND NOBODY CAN FIGURE OUT WHY?
-//THEN GO ON BRAVE TRAVELER
-//TRY TO FIX THEM AND REMOVE THIS CODE
-/obj/item/canvas/Initialize()
-	..()
-	return INITIALIZE_HINT_QDEL //Delete on creation
+
 
 //Find the right size blank canvas
 /obj/item/canvas/proc/getGlobalBackup()

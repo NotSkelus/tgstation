@@ -207,6 +207,7 @@
 #define BURST "burst"
 #define GROWING "growing"
 #define GROWN "grown"
+#define BURSTING "bursting"
 #define MIN_GROWTH_TIME 900	//time it takes to grow a hugger
 #define MAX_GROWTH_TIME 1500
 
@@ -268,6 +269,8 @@
 				to_chat(user, "<span class='notice'>You retrieve the child.</span>")
 				Burst(kill=FALSE)
 				return
+			if(BURSTING)
+				return
 	else
 		to_chat(user, "<span class='notice'>It feels slimy.</span>")
 		user.changeNext_move(CLICK_CD_MELEE)
@@ -282,12 +285,13 @@
 /obj/structure/alien/egg/proc/Burst(kill = TRUE)
 	if(status == GROWN || status == GROWING)
 		proximity_monitor.SetRange(0)
-		status = BURST
+		status = BURSTING
 		update_icon()
 		flick("egg_opening", src)
 		addtimer(CALLBACK(src, .proc/finish_bursting, kill), 15)
 
 /obj/structure/alien/egg/proc/finish_bursting(kill = TRUE)
+	status = BURST
 	if(child)
 		child.forceMove(get_turf(src))
 		// TECHNICALLY you could put non-facehuggers in the child var
